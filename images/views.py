@@ -9,6 +9,7 @@ from django.http import (
     HttpResponseNotFound,
 )
 from django.shortcuts import redirect, render
+from django.template.defaultfilters import first
 from django.views.decorators.csrf import csrf_exempt
 
 from images.decorators import (
@@ -16,7 +17,7 @@ from images.decorators import (
     can_upload_variant,
     can_upload_image,
 )
-from images.models import Image, ImageVariant, ImageVariantTask
+from images.models import Image, ImageVariant
 from images.utils import get_b2_resource
 
 JpegImagePlugin._getmp = lambda x: None
@@ -44,13 +45,16 @@ def upload(request):
         elif im.format == "PNG":
             file_extension = "png"
         else:
-            return {"created": False, "error": "Uploaded file should be JPEG or PNG"}
+            return JsonResponse(
+                {"created": False, "error": "Uploaded file should be JPEG or PNG"},
+                status=400,
+            )
 
     file.seek(0)
 
     same_md5_image = Image.objects.filter(original_md5=file_md5_hash).first()
     if same_md5_image:
-        return {"created": False, "id": same_md5_image.id}
+        return JsonResponse({"created": False, "id": same_md5_image.id})
 
     image = Image(
         original_name=file.name,
@@ -59,44 +63,46 @@ def upload(request):
         height=height,
         width=width,
         model_version=2,
+        version=3,
     )
 
     image.save()
 
-    bucket.upload_fileobj(
-        file, f"{image.backblaze_filepath}/{width}-{height}/image.{file_extension}"
-    )
-
-    ImageVariant.objects.get_or_create(
+    variant, _ = ImageVariant.objects.get_or_create(
         image=image,
         height=height,
         width=width,
         file_type=file_extension,
         is_full_size=True,
+        available=True,
     )
 
-    image.create_variant_tasks(image.width, image.height, file_extension)
+    bucket.upload_fileobj(file, variant.backblaze_filepath)
+
+    image.create_variant_tasks(variant)
     image.uploaded = True
     image.save()
 
-    return JsonResponse({"created": True, "id": image.id})
+    return JsonResponse({"created": True, "id": image.id}, status=201)
 
 
 @can_upload_variant
 def image_type_optimization_needed(request, image_type):
-    tasks = ImageVariantTask.objects.filter(file_type=image_type).all()
+    variants = ImageVariant.objects.filter(
+        image__version=3, file_type=image_type, available=False
+    ).all()[:100]
 
     return JsonResponse(
         {
             "variants": [
                 {
-                    "image_id": task.image.id,
-                    "task_id": task.id,
-                    "height": task.height,
-                    "width": task.width,
-                    "file_type": task.original_file_type,
+                    "original_variant_id": variant.parent_variant_for_optimized_versions.id,
+                    "original_variant_file_type": variant.parent_variant_for_optimized_versions.file_type,
+                    "variant_id": variant.id,
+                    "height": variant.height,
+                    "width": variant.width,
                 }
-                for task in tasks
+                for variant in variants
             ]
         }
     )
@@ -105,47 +111,36 @@ def image_type_optimization_needed(request, image_type):
 @csrf_exempt
 @can_upload_variant
 def upload_variant(request):
-    if "task_id" not in request.POST:
+    if "variant_id" not in request.POST:
         return HttpResponseBadRequest()
 
-    task = ImageVariantTask.objects.filter(id=request.POST["task_id"]).first()
+    variant = ImageVariant.objects.filter(id=request.POST["variant_id"]).first()
 
-    if not task:
+    if not variant:
         return HttpResponseNotFound()
 
-    image = task.image
-    height = task.height
-    width = task.width
-    file_type = task.file_type
     file = request.FILES["file"]
-
-    if file_type == "jpegli":
-        file_name = "jpegli.jpg"
-    else:
-        file_name = "image." + file_type
-
-    upload_path = f"{image.backblaze_filepath}/{width}-{height}/{file_name}"
 
     bucket = get_b2_resource()
 
-    bucket.upload_fileobj(file, upload_path)
+    bucket.upload_fileobj(file, variant.backblaze_filepath)
 
-    ImageVariant.objects.get_or_create(
-        image=image,
-        height=height,
-        width=width,
-        file_type=file_type,
-        is_full_size=(height == image.height and width == image.width),
-    )
-
-    task.delete()
+    variant.available = True
+    variant.save()
 
     return JsonResponse({"status": "ok"})
 
 
 def image_with_size(request, image, width, height, image_type):
+    gaussian_blur = float(request.GET.get("gaussian_blur", 0))
+    brightness = float(request.GET.get("brightness", 1))
+
     image_variants = ImageVariant.objects.filter(
-        image=image, height=height, width=width
+        image=image,
+        height=height,
+        width=width,
+        gaussian_blur=gaussian_blur,
+        brightness=brightness,
     )
     if image_type != "auto":
         if image_type == "original":
@@ -153,16 +148,21 @@ def image_with_size(request, image, width, height, image_type):
         else:
             image_variants = image_variants.filter(file_type=image_type)
 
+    if image.version == 3:
+        image_variants = image_variants.filter(available=True)
+
     variants = image_variants.all()
 
     if not variants:
         if image_type != "auto" and image_type != "original":
             return JsonResponse({"error": "Image version not available"}, status=404)
         else:
-            image_variant = image.create_variant(width, height)
+            image_variant = image.create_variant(
+                width, height, gaussian_blur, brightness
+            )
 
             return redirect(
-                f"{settings.S3_PUBLIC_BASE_PATH}/{image.backblaze_filepath}/{width}-{height}/image.{image_variant.file_type}"
+                f"{settings.S3_PUBLIC_BASE_PATH}/{image_variant.backblaze_filepath}"
             )
 
     if image_type == "auto":
@@ -195,14 +195,17 @@ def image_with_size(request, image, width, height, image_type):
 
         variant = variant[0]
 
-        if file_type == "jpegli":
-            file_name = "jpegli.jpg"
-        else:
-            file_name = "image." + file_type
+        if image.version == 2:
+            if file_type == "jpegli":
+                file_name = "jpegli.jpg"
+            else:
+                file_name = "image." + file_type
 
-        return redirect(
-            f"{settings.S3_PUBLIC_BASE_PATH}/{image.backblaze_filepath}/{variant.width}-{variant.height}/{file_name}"
-        )
+            return redirect(
+                f"{settings.S3_PUBLIC_BASE_PATH}/{image.backblaze_filepath}/{variant.width}-{variant.height}/{file_name}"
+            )
+
+        return redirect(f"{settings.S3_PUBLIC_BASE_PATH}/{variant.backblaze_filepath}")
 
     return HttpResponseNotFound()
 
