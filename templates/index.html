@@ -24,7 +24,7 @@
 		<div class="container">
 			<h2>Upload an image once, use it everywhere on the web</h2>
 			<p>
-				Kakigoori is an image management service to publish images on the web. Upload it once, and Kakigoori will create versions of the image, optimized for the web (AVIF, WebP, Jpegli). You can also request for custom sized images, of which the JPG/PNG versions will be generated on the fly, and the other versions will be created within a few minutes.
+				Kakigoori is an picture distribution system to publish images on the web. Upload it once, and Kakigoori will create versions of the image optimized for the web (AVIF, WebP). You can also request for custom sized images (JPG/PNG versions will be generated on the fly, and the other versions will be created within a few minutes).
 			</p>
 			<p>
 				Kakigoori's images are stored by Backblaze and distributed by Cloudflare. No matter where you are in the world, images stored by Kakigoori will display as fast as possible.
@@ -55,7 +55,7 @@
 
 			<details>
 				<summary>Who is using Kakigoori?</summary>
-				My websites (remilia.ch and ecdfeaa2.moe) all have their images stored on Kakigoori! I also use Kakigoori on some projects I worked on professionaly.
+				My websites (remilia.ch and ecdfeaa2.moe) all have their images stored on Kakigoori! I also use Kakigoori on some projects I worked on professionally.
 			</details>
 
 			<details>
@@ -66,12 +66,14 @@
 
 			<details>
 				<summary>How private is Kakigoori?</summary>
-				I'm not storing IPs, I'm not doing statistics, I'm not showing you any cookie banner because I'm not storing any, so on my side, I would say it's pretty compliant with privacy standards.<br>The only people that may know about you loading images from Kakigoori is Cloudflare, but at this point, with how much market share they have over the big websites of the Internet, they already know enough abut you ^^
+                <p>I'm tired of bots and AI scrappers hitting my server, so, requests to the service are logged (with IP addresses, request URI, headers and timestamps), but those data are being collected to ensure I can ban malicious users and protect my servers, and I'm deleting those logs within 7 days of collecting them.</p>
+                <p>I'm also not showing you any cookie banner because I'm not storing any. Privacy is important to me, so I'm trying to find the best balance between that and security.</p>
+                <p>Because Cloudflare is being used as the proxy for the images themselves (to lower egress fees and improve connection times), they may also know that you're loading the images, but at this point, with how much market share they have over the big websites of the Internet, they already know enough abut you ^^</p>
 			</details>
             
             <details>
 				<summary>Is Kakigoori open-source?</summary>
-				Yes! Please see <a href="https://github.com/ecdfeaa2/kakigoori">the GitHub project for that!</a>
+				Yes! Please see <a href="https://git.remilia.ch/remilia/kakigoori">the git project for that!</a>
 			</details>
 
 			<details>
