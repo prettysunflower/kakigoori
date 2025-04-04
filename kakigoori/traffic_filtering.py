@@ -22,13 +22,12 @@ class TrafficRule:
 
     def test_rule(self, request: HttpRequest):
         user_agent = request.META.get("HTTP_USER_AGENT") or None
-        if user_agent is None:
+        if not user_agent:
             return TrafficRuleAction.DENY
 
         print(user_agent)
 
-        if self.user_agent_regex.search(user_agent) is not None:
-            print("FOUND, RETURNING ACTINO")
+        if self.user_agent_regex.search(user_agent):
             return self.action
 
         return TrafficRuleAction.NO_ACTION
