@@ -27,7 +27,7 @@
 				Kakigoori is an picture distribution system to publish images on the web. Upload it once, and Kakigoori will create versions of the image optimized for the web (AVIF, WebP). You can also request for custom sized images (JPG/PNG versions will be generated on the fly, and the other versions will be created within a few minutes).
 			</p>
 			<p>
-				Kakigoori's images are stored by Backblaze and distributed by Cloudflare. No matter where you are in the world, images stored by Kakigoori will display as fast as possible.
+				Kakigoori's images are stored by Tigris. No matter where you are in the world, images stored by Kakigoori will display as fast as possible.
 			</p>
 
 			<hr>
@@ -60,15 +60,15 @@
 
 			<details>
 				<summary>Can I upload images to Kakigoori?</summary>
-				Well... currently, I'm kind of concerned about opening upload to anyone (I wouldn't want to have Backblaze sending me a nasty bill for using too much storage, or having them send me a gentle email to ask me why the fuck I'm hosting illicit content ^^).<br>
-				So, my default answer is no, but if you're really interested to use Kakigoori, either self-host Kakigoori yourself, or if you want to use this hosted version and you're a friendly person, please send me an email to <a href="mailto:remilia@remilia.ch">remilia@remilia.ch</a> and I will see what I can do for you!
+				Well... currently, I'm kind of concerned about opening upload to anyone (I wouldn't want to have Tigris sending me a nasty bill for using too much storage, or having them send me a gentle email to ask me why the fuck I'm hosting illicit content ^^).<br>
+				So, my default answer is no, but if you're really interested to use Kakigoori, either self-host Kakigoori yourself, or if you want to use this hosted version and you're a friendly person, please send me an email to <a href="mailto:remilia@remilia.ch">remilia@remilia.ch</a> and I will see what I can do for you!<br>
+                Also, Koumbit people, you have an uploading key, please check the Wiki! ^^
 			</details>
 
 			<details>
 				<summary>How private is Kakigoori?</summary>
-                <p>I'm tired of bots and AI scrappers hitting my server, so, requests to the service are logged (with IP addresses, request URI, headers and timestamps), but those data are being collected to ensure I can ban malicious users and protect my servers, and I'm deleting those logs within 7 days of collecting them.</p>
-                <p>I'm also not showing you any cookie banner because I'm not storing any. Privacy is important to me, so I'm trying to find the best balance between that and security.</p>
-                <p>Because Cloudflare is being used as the proxy for the images themselves (to lower egress fees and improve connection times), they may also know that you're loading the images, but at this point, with how much market share they have over the big websites of the Internet, they already know enough abut you ^^</p>
+                <p>I'm tired of bots and AI scrappers hitting my server, so, requests to the service are passed through <a href="https://anubis.techaro.lol/">Anubis</a>, and if your request is challenged, a cookie will be placed to remember you passed the challenged.</p>
+                <p>Otherwise, we're not collecting data other than what is submitted to us (images!), so... it should be pretty private ^^</p>
 			</details>
             
             <details>
@@ -78,7 +78,7 @@
 
 			<details>
 				<summary>Who is behind Kakigoori?</summary>
-				I'm Remilia Da Costa Faro, your friendly nearby software developer and non-binary trans woman!
+				We're Remilia and Xeon Da Costa Faro, your friendly nearby software developers and non-binary/plural trans women!
 			</details>
 
 			<details>
