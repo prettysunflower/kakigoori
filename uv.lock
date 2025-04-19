@@ -203,6 +203,7 @@ dependencies = [
     { name = "sentry-sdk" },
     { name = "six" },
     { name = "sqlparse" },
+    { name = "tzdata" },
     { name = "urllib3" },
 ]
 
@@ -230,6 +231,7 @@ requires-dist = [
     { name = "sentry-sdk", specifier = "==2.14.0" },
     { name = "six", specifier = "==1.16.0" },
     { name = "sqlparse", specifier = "==0.5.1" },
+    { name = "tzdata", specifier = ">=2025.2" },
     { name = "urllib3", specifier = "==2.2.2" },
 ]
 
