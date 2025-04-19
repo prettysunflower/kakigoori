@@ -9,7 +9,6 @@ from django.http import (
     HttpResponseNotFound,
 )
 from django.shortcuts import redirect, render
-from django.template.defaultfilters import first
 from django.views.decorators.csrf import csrf_exempt
 
 from images.decorators import (
