@@ -42,8 +42,10 @@ def upload(request):
 
         if im.format == "JPEG":
             file_extension = "jpg"
+            content_type = "image/jpeg"
         elif im.format == "PNG":
             file_extension = "png"
+            content_type = "image/png"
         else:
             return JsonResponse(
                 {"created": False, "error": "Uploaded file should be JPEG or PNG"},
@@ -58,7 +60,7 @@ def upload(request):
 
     image = Image(
         original_name=file.name,
-        original_mime_type=file.content_type,
+        original_mime_type=content_type,
         original_md5=file_md5_hash,
         height=height,
         width=width,
@@ -77,7 +79,9 @@ def upload(request):
         available=True,
     )
 
-    bucket.upload_fileobj(file, variant.backblaze_filepath)
+    bucket.upload_fileobj(
+        file, variant.backblaze_filepath, ContentType={"ContentType": content_type}
+    )
 
     image.create_variant_tasks(variant)
     image.uploaded = True
@@ -123,7 +127,16 @@ def upload_variant(request):
 
     bucket = get_b2_resource()
 
-    bucket.upload_fileobj(file, variant.backblaze_filepath)
+    if variant.file_type == "avif":
+        content_type = "image/avif"
+    elif variant.file_type == "webp":
+        content_type = "image/webp"
+    else:
+        content_type = "binary/octet-stream"
+
+    bucket.upload_fileobj(
+        file, variant.backblaze_filepath, ContentType={"ContentType": content_type}
+    )
 
     variant.available = True
     variant.save()
