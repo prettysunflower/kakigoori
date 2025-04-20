@@ -79,7 +79,7 @@ def upload(request):
     )
 
     bucket.upload_fileobj(
-        file, variant.backblaze_filepath, ContentType={"ContentType": content_type}
+        file, variant.backblaze_filepath, ExtraArgs={"ContentType": content_type}
     )
 
     image.create_variant_tasks(variant)
@@ -134,7 +134,7 @@ def upload_variant(request):
         content_type = "binary/octet-stream"
 
     bucket.upload_fileobj(
-        file, variant.backblaze_filepath, ContentType={"ContentType": content_type}
+        file, variant.backblaze_filepath, ExtraArgs={"ContentType": content_type}
     )
 
     variant.available = True
