@@ -99,6 +99,8 @@ class Image(models.Model):
             available=True,
         )
 
+        content_type = "image/jpeg"
+
         with PILImage.open(original_image) as im:
             ImageOps.exif_transpose(im, in_place=True)
             im = im.filter(ImageFilter.GaussianBlur(gaussian_blur))
@@ -110,6 +112,7 @@ class Image(models.Model):
                 try:
                     im.save(resized_image, "PNG")
                     image_variant.file_extension = "png"
+                    content_type = "image/png"
                 except OSError:
                     im.convert("RGB").save(resized_image, "JPEG")
             else:
@@ -120,7 +123,11 @@ class Image(models.Model):
 
         resized_image.seek(0)
 
-        bucket.upload_fileobj(resized_image, image_variant.backblaze_filepath)
+        bucket.upload_fileobj(
+            resized_image,
+            image_variant.backblaze_filepath,
+            ExtraArgs={"ContentType": content_type},
+        )
 
         image_variant.save()
 
