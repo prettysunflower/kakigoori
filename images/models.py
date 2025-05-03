@@ -58,18 +58,7 @@ class Image(models.Model):
             available=False,
         ).save()
 
-        ImageVariant(
-            image=variant.image,
-            height=variant.height,
-            width=variant.width,
-            is_full_size=variant.is_full_size,
-            file_type="jpegli",
-            gaussian_blur=variant.gaussian_blur,
-            brightness=variant.brightness,
-            available=False,
-        ).save()
-
-    def create_variant(self, width, height, gaussian_blur, brightness):
+    def download_original_variant(self):
         bucket = get_b2_resource()
 
         original_image = BytesIO()
@@ -85,8 +74,46 @@ class Image(models.Model):
             original_image,
         )
         original_image.seek(0)
+        return original_image
 
+    def create_resized_image(
+        self,
+        height,
+        width,
+        gaussian_blur,
+        brightness,
+    ):
+        original_image = self.download_original_variant()
         resized_image = BytesIO()
+        file_extension = "jpg"
+
+        with PILImage.open(original_image) as im:
+            ImageOps.exif_transpose(im, in_place=True)
+            im = im.filter(ImageFilter.GaussianBlur(gaussian_blur))
+            enhancer = ImageEnhance.Brightness(im)
+            im = enhancer.enhance(brightness)
+            im.thumbnail(
+                (width, height), resample=PILImage.Resampling.LANCZOS, reducing_gap=3.0
+            )
+
+            if im.has_transparency_data:
+                try:
+                    im.save(resized_image, "PNG", quality=90)
+                    file_extension = "png"
+                except OSError:
+                    im.convert("RGB").save(resized_image, "JPEG", quality=90)
+            else:
+                try:
+                    im.save(resized_image, "JPEG", quality=90)
+                except OSError:
+                    im.convert("RGB").save(resized_image, "JPEG", quality=90)
+
+        resized_image.seek(0)
+
+        return resized_image, file_extension
+
+    def create_variant(self, width, height, gaussian_blur, brightness):
+        bucket = get_b2_resource()
 
         image_variant = ImageVariant(
             image=self,
@@ -99,29 +126,18 @@ class Image(models.Model):
             available=True,
         )
 
-        content_type = "image/jpeg"
+        resized_image, file_extension = self.create_resized_image(
+            height, width, gaussian_blur, brightness
+        )
 
-        with PILImage.open(original_image) as im:
-            ImageOps.exif_transpose(im, in_place=True)
-            im = im.filter(ImageFilter.GaussianBlur(gaussian_blur))
-            enhancer = ImageEnhance.Brightness(im)
-            im = enhancer.enhance(brightness)
-            im.thumbnail((width, height))
+        if file_extension == "jpg":
+            content_type = "image/jpeg"
+        elif file_extension == "png":
+            content_type = "image/png"
+        else:
+            content_type = "binary/octet-stream"
 
-            if im.has_transparency_data:
-                try:
-                    im.save(resized_image, "PNG")
-                    image_variant.file_extension = "png"
-                    content_type = "image/png"
-                except OSError:
-                    im.convert("RGB").save(resized_image, "JPEG")
-            else:
-                try:
-                    im.save(resized_image, "JPEG")
-                except OSError:
-                    im.convert("RGB").save(resized_image, "JPEG")
-
-        resized_image.seek(0)
+        image_variant.file_type = file_extension
 
         bucket.upload_fileobj(
             resized_image,
@@ -146,6 +162,7 @@ class ImageVariant(models.Model):
     is_full_size = models.BooleanField(default=False)
     file_type = models.CharField(max_length=10)
     available = models.BooleanField(default=False)
+    regenerate = models.BooleanField(default=False)
 
     @property
     def backblaze_filepath(self):
