@@ -91,6 +91,7 @@ def upload(request):
         file_type=file_extension,
         is_full_size=True,
         available=True,
+        is_primary_variant=True,
     )
 
     bucket.upload_fileobj(
