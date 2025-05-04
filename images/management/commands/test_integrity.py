@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from images.models import Image
 from images.utils import get_b2_resource
+import botocore
 
 
 class Command(BaseCommand):
@@ -22,9 +23,17 @@ class Command(BaseCommand):
             if image_variant_set.count() > 1:
                 found_etags = []
                 for image_variant in image_variant_set.all():
-                    e_tag = self.bucket.Object(image_variant.backblaze_filepath).e_tag[
-                        1:-1
-                    ]
+                    try:
+                        e_tag = self.bucket.Object(
+                            image_variant.backblaze_filepath
+                        ).e_tag[1:-1]
+                    except botocore.exceptions.ClientError as e:
+                        if e.response["Error"]["Code"] == "404":
+                            print(f"Variant {image_variant.id} not found, deleting...")
+                            image_variant.delete()
+                            continue
+                        else:
+                            raise
 
                     if e_tag in found_etags:
                         image_variant.delete()
