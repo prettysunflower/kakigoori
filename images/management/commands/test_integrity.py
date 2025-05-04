@@ -54,7 +54,19 @@ class Command(BaseCommand):
 
         for image in Image.objects.all():
             if image.imagevariant_set.filter(is_primary_variant=True).count() == 0:
-                images_with_problems.append(image)
+                image_variants = image.imagevariant_set.filter(
+                    is_full_size=True,
+                    file_type__in=["jpg", "png"],
+                    gaussian_blur=0,
+                    brightness=1,
+                )
+                if image_variants.count() == 1:
+                    image_variants.update(is_primary_variant=True)
+                    print(
+                        f"SELF-HEALED: Image {image.id} had no primary variant, we assigned one"
+                    )
+                else:
+                    images_with_problems.append(image)
 
         return images_with_problems
 
