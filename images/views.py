@@ -1,4 +1,7 @@
 import hashlib
+import random
+import string
+from io import BytesIO
 
 from PIL import Image as PILImage
 from PIL import JpegImagePlugin
@@ -33,8 +36,7 @@ def upload(request):
 
     bucket = get_b2_resource()
 
-    file_md5_hash = hashlib.file_digest(file, "md5").hexdigest()
-    file.seek(0)
+    filename = file.name
 
     with PILImage.open(file) as im:
         height, width = (im.height, im.width)
@@ -46,11 +48,24 @@ def upload(request):
             file_extension = "png"
             content_type = "image/png"
         else:
-            return JsonResponse(
-                {"created": False, "error": "Uploaded file should be JPEG or PNG"},
-                status=400,
+            new_file = BytesIO()
+            filename = (
+                "".join(random.choices(string.ascii_uppercase + string.digits, k=12))
+                + ".jpg"
             )
+            im.save(
+                new_file,
+                format="jpeg",
+                quality=95,
+                icc_profile=im.info.get("icc_profile"),
+                keep_rgb=True,
+            )
+            file = new_file
+            content_type = "image/jpeg"
+            file_extension = "jpg"
 
+    file.seek(0)
+    file_md5_hash = hashlib.file_digest(file, "md5").hexdigest()
     file.seek(0)
 
     same_md5_image = Image.objects.filter(original_md5=file_md5_hash).first()
@@ -58,7 +73,7 @@ def upload(request):
         return JsonResponse({"created": False, "id": same_md5_image.id})
 
     image = Image(
-        original_name=file.name,
+        original_name=filename,
         original_mime_type=content_type,
         original_md5=file_md5_hash,
         height=height,
