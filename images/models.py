@@ -159,6 +159,7 @@ class ImageVariant(models.Model):
     width = models.IntegerField()
     gaussian_blur = models.FloatField(default=0)
     brightness = models.FloatField(default=1)
+    is_primary_variant = models.BooleanField(default=False)
     is_full_size = models.BooleanField(default=False)
     file_type = models.CharField(max_length=10)
     available = models.BooleanField(default=False)
