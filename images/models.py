@@ -62,12 +62,7 @@ class Image(models.Model):
         bucket = get_b2_resource()
 
         original_image = BytesIO()
-        original_variant = self.imagevariant_set.filter(
-            is_full_size=True,
-            file_type__in=["jpg", "png"],
-            gaussian_blur=0,
-            brightness=1,
-        ).first()
+        original_variant = self.imagevariant_set.filter(is_primary_variant=True).first()
 
         bucket.download_fileobj(
             original_variant.backblaze_filepath,
