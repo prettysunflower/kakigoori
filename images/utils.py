@@ -1,3 +1,5 @@
+import subprocess
+
 import boto3
 from botocore.config import Config
 from django.conf import settings
@@ -15,3 +17,14 @@ def get_b2_resource():
     bucket = b2.Bucket(settings.S3_BUCKET)
 
     return bucket
+
+
+def remove_exif_gps_data(image_data: bytes) -> bytes:
+    result = subprocess.run(
+        ["exiftool", "-gps:all=", "-"], input=image_data, capture_output=True
+    )
+
+    if not result.check_returncode():
+        return image_data
+    else:
+        raise Exception(result.stderr)

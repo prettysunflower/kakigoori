@@ -1,6 +1,6 @@
 FROM alpine:3.21
 
-RUN apk add curl python3
+RUN apk add curl python3 exiftool
 RUN adduser -D kakigoori
 
 USER kakigoori
