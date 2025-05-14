@@ -20,7 +20,7 @@ from images.decorators import (
     can_upload_image,
 )
 from images.models import Image, ImageVariant
-from images.utils import get_b2_resource
+from images.utils import get_b2_resource, remove_exif_gps_data
 
 JpegImagePlugin._getmp = lambda x: None
 
@@ -94,8 +94,12 @@ def upload(request):
         is_primary_variant=True,
     )
 
-    bucket.upload_fileobj(
-        file, variant.backblaze_filepath, ExtraArgs={"ContentType": content_type}
+    image_data = remove_exif_gps_data(file.read())
+
+    bucket.put_object(
+        Body=image_data,
+        Key=variant.backblaze_filepath,
+        ContentType=content_type,
     )
 
     image.create_variant_tasks(variant)
