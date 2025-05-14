@@ -25,6 +25,6 @@ def remove_exif_gps_data(image_data: bytes) -> bytes:
     )
 
     if not result.check_returncode():
-        return image_data
+        return result.stdout
     else:
         raise Exception(result.stderr)
