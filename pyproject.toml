@@ -10,7 +10,7 @@ dependencies = [
     "botocore==1.38.29",
     "certifi==2025.6.15",
     "charset-normalizer==3.3.2",
-    "click==8.1.7",
+    "click==8.2.1",
     "django>=5.2.1",
     "gunicorn==23.0.0",
     "idna==3.8",
