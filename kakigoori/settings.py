@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import pika
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -115,5 +118,27 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
+if not RABBITMQ_HOST:
+    raise ValueError("RABBITMQ_HOST environment variable is not set")
+
+RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT")
+if not RABBITMQ_PORT:
+    RABBITMQ_PORT = 5672
+
+rabbitmq_connection_parameters = pika.ConnectionParameters(
+    host=RABBITMQ_HOST, port=RABBITMQ_PORT
+)
+
+if os.environ.get("RABBITMQ_USER") and os.environ.get("RABBITMQ_PASSWORD"):
+    RABBITMQ_USER = os.environ.get("RABBITMQ_USER")
+    RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD")
+    rabbitmq_connection_parameters.credentials = pika.PlainCredentials(
+        username=RABBITMQ_USER, password=RABBITMQ_PASSWORD
+    )
+
+if os.environ.get("RABBITMQ_VHOST"):
+    rabbitmq_connection_parameters.virtual_host = os.environ.get("RABBITMQ_VHOST")
 
 from .local_settings import *

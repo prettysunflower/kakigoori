@@ -11,11 +11,12 @@ import os
 import pika
 
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
-
 if not RABBITMQ_HOST:
     raise ValueError("RABBITMQ_HOST environment variable is not set")
 
-RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT", 5672)
+RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT")
+if not RABBITMQ_PORT:
+    RABBITMQ_PORT = 5672
 
 connection_parameters = pika.ConnectionParameters(
     host=RABBITMQ_HOST, port=RABBITMQ_PORT
@@ -64,6 +65,7 @@ def callback(ch, method, properties, body):
     except subprocess.CalledProcessError as e:
         print(e.output)
         print(f"AVIF Ignore {variant_id}")
+        ch.basic_ack(delivery_tag=method.delivery_tag)
         return
 
     with open(f"avif_{variant_id}.avif", "rb") as f:
@@ -71,7 +73,7 @@ def callback(ch, method, properties, body):
 
     message = {
         "variant_id": variant_id,
-        "original_file": base64.b64encode(image).decode("utf-8"),
+        "variant_file": base64.b64encode(image).decode("utf-8"),
     }
 
     channel.basic_publish(
