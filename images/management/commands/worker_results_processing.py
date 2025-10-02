@@ -1,5 +1,6 @@
 import base64
 import json
+from io import BytesIO
 
 import pika
 from django.core.management.base import BaseCommand
@@ -43,7 +44,7 @@ class Command(BaseCommand):
             bucket = get_b2_resource()
 
             bucket.upload_fileobj(
-                variant_file,
+                BytesIO(variant_file),
                 variant.backblaze_filepath,
                 ExtraArgs={"ContentType": content_type},
             )
