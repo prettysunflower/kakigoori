@@ -102,7 +102,7 @@ def upload(request):
         ContentType=content_type,
     )
 
-    image.create_variant_tasks(variant)
+    image.create_variant_tasks(variant, image_data)
     image.uploaded = True
     image.save()
 

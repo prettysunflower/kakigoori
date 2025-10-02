@@ -127,18 +127,18 @@ RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT")
 if not RABBITMQ_PORT:
     RABBITMQ_PORT = 5672
 
-rabbitmq_connection_parameters = pika.ConnectionParameters(
+RABBITMQ_CONNECTION_PARAMETERS = pika.ConnectionParameters(
     host=RABBITMQ_HOST, port=RABBITMQ_PORT
 )
 
 if os.environ.get("RABBITMQ_USER") and os.environ.get("RABBITMQ_PASSWORD"):
     RABBITMQ_USER = os.environ.get("RABBITMQ_USER")
     RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD")
-    rabbitmq_connection_parameters.credentials = pika.PlainCredentials(
+    RABBITMQ_CONNECTION_PARAMETERS.credentials = pika.PlainCredentials(
         username=RABBITMQ_USER, password=RABBITMQ_PASSWORD
     )
 
 if os.environ.get("RABBITMQ_VHOST"):
-    rabbitmq_connection_parameters.virtual_host = os.environ.get("RABBITMQ_VHOST")
+    RABBITMQ_CONNECTION_PARAMETERS.virtual_host = os.environ.get("RABBITMQ_VHOST")
 
 from .local_settings import *

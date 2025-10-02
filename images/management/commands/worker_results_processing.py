@@ -2,19 +2,19 @@ import base64
 import json
 
 import pika
-from django.conf import settings
 from django.core.management.base import BaseCommand
 import logging
 
 from images.models import ImageVariant
 from images.utils import get_b2_resource
+from kakigoori import settings
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        connection = pika.BlockingConnection(settings.rabbitmq_connection_parameters)
+        connection = pika.BlockingConnection(settings.RABBITMQ_CONNECTION_PARAMETERS)
 
         channel = connection.channel()
         channel.queue_declare(queue="process_variant", durable=True)
@@ -56,6 +56,6 @@ class Command(BaseCommand):
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
         channel.basic_qos(prefetch_count=1)
-        channel.basic_consume(queue="task_queue", on_message_callback=callback)
+        channel.basic_consume(queue="process_variant", on_message_callback=callback)
 
         channel.start_consuming()

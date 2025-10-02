@@ -1,10 +1,10 @@
 import uuid
 from io import BytesIO
 
-from botocore.compat import file_type
 from django.db import models
 from django.utils import timezone
 
+from images.tasks import send_image_to_worker
 from images.utils import get_b2_resource
 from PIL import Image as PILImage, ImageOps, ImageEnhance, ImageFilter
 
@@ -35,8 +35,8 @@ class Image(models.Model):
     def backblaze_filepath(self):
         return f"{self.id.hex[:2]}/{self.id.hex[2:4]}/{self.id.hex}"
 
-    def create_variant_tasks(self, variant):
-        ImageVariant(
+    def create_variant_tasks(self, variant, image_data: bytes):
+        avif_variant = ImageVariant(
             image=variant.image,
             height=variant.height,
             width=variant.width,
@@ -45,7 +45,11 @@ class Image(models.Model):
             gaussian_blur=variant.gaussian_blur,
             brightness=variant.brightness,
             available=False,
-        ).save()
+        )
+
+        avif_variant.save()
+
+        send_image_to_worker(image_variant=avif_variant, image_data=image_data)
 
         ImageVariant(
             image=variant.image,
@@ -174,6 +178,9 @@ class ImageVariant(models.Model):
             brightness=self.brightness,
             file_type__in=["jpg", "png"],
         ).first()
+
+    def save(self, **kwargs):
+        super().save(**kwargs)
 
 
 class ImageVariantTask(models.Model):
