@@ -1,0 +1,48 @@
+name: Build AVIF worker Docker image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    tags: [ "*" ]
+
+defaults:
+  run:
+    working-directory: avif_worker
+
+jobs:
+  acls:
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: git.prettysunflower.moe/prettysunflower/kakigoori-avif-worker
+      -
+        name: Login to Gitea Container Hub
+        uses: docker/login-action@v3
+        with:
+          registry: git.prettysunflower.moe
+          username: ${{ vars.HUB_USERNAME }}
+          password: ${{ secrets.HUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:avif_worker"
+          push: ${{ gitea.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64

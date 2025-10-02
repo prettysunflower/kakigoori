@@ -1,0 +1,14 @@
+services:
+  avif_worker:
+    build: .
+    environment:
+      RABBITMQ_HOST: "rabbitmq"
+      PYTHONUNBUFFERED: 1
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_started
+  rabbitmq:
+    image: "rabbitmq:latest"
+    ports:
+      - "5672:5672"
