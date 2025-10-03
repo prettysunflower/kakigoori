@@ -78,7 +78,6 @@ def upload(request):
         original_md5=file_md5_hash,
         height=height,
         width=width,
-        model_version=2,
         version=3,
     )
 
