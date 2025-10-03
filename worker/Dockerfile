@@ -1,6 +1,6 @@
 FROM alpine:3.22
 
-COPY --from=git.prettysunflower.moe/prettysunflower/avif:libavif-1.3.0-svtav1psyex-3.0.2B /libavif/build/avifenc /usr/bin/avifenc
+COPY --from=git.prettysunflower.moe/prettysunflower/avif:libavif-1.3.0-libaom-3.13.1-svtav1psyex-3.0.2B /usr/bin/avifenc /usr/bin/avifenc
 
 RUN apk add curl libwebp libwebp-tools
 RUN adduser -D kakigoori

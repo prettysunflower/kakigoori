@@ -124,7 +124,9 @@ class Worker:
     def avif_processing(self, input_file, output_file):
         subprocess.run(
             [
-                *"/usr/bin/avifenc -y 420 -a tune=4".split(" "),
+                *"/usr/bin/avifenc -c aom -s 4 -j 8 -d 10 -y 444 -q 50 -a end-usage=q -a cq-level=18 -a tune=iq".split(
+                    " "
+                ),
                 input_file,
                 output_file,
             ],
