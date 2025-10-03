@@ -59,4 +59,6 @@ class Command(BaseCommand):
         channel.basic_qos(prefetch_count=1)
         channel.basic_consume(queue="process_variant", on_message_callback=callback)
 
+        logger.info("Ready to process")
+
         channel.start_consuming()
