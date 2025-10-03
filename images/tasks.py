@@ -8,16 +8,16 @@ from images.utils import get_b2_resource
 from kakigoori import settings
 
 
-def send_image_to_worker(image_variant, image_data: bytes | None = None):
+def send_image_to_worker(image_variant, image_data: BytesIO | None = None):
     original_image_variant = image_variant.parent_variant_for_optimized_versions
 
     if image_data:
-        file = BytesIO(image_data)
+        file = image_data
     else:
         s3_bucket = get_b2_resource()
 
         file = BytesIO()
-        s3_bucket.download_fileobj(original_image_variant.backblaze_filepath, file)
+        s3_bucket.download_fileobj(original_image_variant.s3_filepath, file)
 
     file.seek(0)
 

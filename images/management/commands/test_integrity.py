@@ -24,9 +24,9 @@ class Command(BaseCommand):
                 found_etags = []
                 for image_variant in image_variant_set.all():
                     try:
-                        e_tag = self.bucket.Object(
-                            image_variant.backblaze_filepath
-                        ).e_tag[1:-1]
+                        e_tag = self.bucket.Object(image_variant.s3_filepath).e_tag[
+                            1:-1
+                        ]
                     except botocore.exceptions.ClientError as e:
                         if e.response["Error"]["Code"] == "404":
                             print(f"Variant {image_variant.id} not found, deleting...")

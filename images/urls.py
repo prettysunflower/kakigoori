@@ -5,16 +5,6 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("upload", views.upload, name="images.upload"),
-    path(
-        "conversion_tasks/upload_variant",
-        views.upload_variant,
-        name="images.upload_variant",
-    ),
-    path(
-        "conversion_tasks/<image_type>",
-        views.image_type_optimization_needed,
-        name="images.avif_optimization_needed",
-    ),
     path("<uuid:image_id>/<str:image_type>", views.get, name="images.get"),
     path(
         "<uuid:image_id>/<str:image_type>/thumbnail",

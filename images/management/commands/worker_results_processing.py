@@ -45,7 +45,7 @@ class Command(BaseCommand):
 
             bucket.upload_fileobj(
                 BytesIO(variant_file),
-                variant.backblaze_filepath,
+                variant.s3_filepath,
                 ExtraArgs={"ContentType": content_type},
             )
 

@@ -98,69 +98,15 @@ def upload(request):
 
     bucket.put_object(
         Body=image_data,
-        Key=variant.backblaze_filepath,
+        Key=variant.s3_filepath,
         ContentType=content_type,
     )
 
-    image.create_variant_tasks(variant, image_data)
+    image.create_variant_tasks(variant, BytesIO(image_data))
     image.uploaded = True
     image.save()
 
     return JsonResponse({"created": True, "id": image.id}, status=201)
-
-
-@can_upload_variant
-def image_type_optimization_needed(request, image_type):
-    variants = ImageVariant.objects.filter(
-        image__version=3, file_type=image_type, available=False
-    ).all()[:100]
-
-    return JsonResponse(
-        {
-            "variants": [
-                {
-                    "original_variant_id": variant.parent_variant_for_optimized_versions.id,
-                    "original_variant_file_type": variant.parent_variant_for_optimized_versions.file_type,
-                    "variant_id": variant.id,
-                    "height": variant.height,
-                    "width": variant.width,
-                }
-                for variant in variants
-            ]
-        }
-    )
-
-
-@csrf_exempt
-@can_upload_variant
-def upload_variant(request):
-    if "variant_id" not in request.POST:
-        return HttpResponseBadRequest()
-
-    variant = ImageVariant.objects.filter(id=request.POST["variant_id"]).first()
-
-    if not variant:
-        return HttpResponseNotFound()
-
-    file = request.FILES["file"]
-
-    bucket = get_b2_resource()
-
-    if variant.file_type == "avif":
-        content_type = "image/avif"
-    elif variant.file_type == "webp":
-        content_type = "image/webp"
-    else:
-        content_type = "binary/octet-stream"
-
-    bucket.upload_fileobj(
-        file, variant.backblaze_filepath, ExtraArgs={"ContentType": content_type}
-    )
-
-    variant.available = True
-    variant.save()
-
-    return JsonResponse({"status": "ok"})
 
 
 def image_with_size(request, image, width, height, image_type):
@@ -194,7 +140,7 @@ def image_with_size(request, image, width, height, image_type):
             )
 
             return redirect(
-                f"{settings.S3_PUBLIC_BASE_PATH}/{image_variant.backblaze_filepath}"
+                f"{settings.S3_PUBLIC_BASE_PATH}/{image_variant.s3_filepath}"
             )
 
     if image_type == "auto":
@@ -234,10 +180,10 @@ def image_with_size(request, image, width, height, image_type):
                 file_name = "image." + file_type
 
             return redirect(
-                f"{settings.S3_PUBLIC_BASE_PATH}/{image.backblaze_filepath}/{variant.width}-{variant.height}/{file_name}"
+                f"{settings.S3_PUBLIC_BASE_PATH}/{image.s3_filepath}/{variant.width}-{variant.height}/{file_name}"
             )
 
-        return redirect(f"{settings.S3_PUBLIC_BASE_PATH}/{variant.backblaze_filepath}")
+        return redirect(f"{settings.S3_PUBLIC_BASE_PATH}/{variant.s3_filepath}")
 
     return HttpResponseNotFound()
 

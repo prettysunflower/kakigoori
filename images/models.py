@@ -16,10 +16,6 @@ class Image(models.Model):
     original_name = models.CharField(max_length=150)
     original_mime_type = models.CharField(max_length=10)
     original_md5 = models.CharField(max_length=32)
-    is_webp_available = models.BooleanField(default=False)
-    is_avif_available = models.BooleanField(default=False)
-    is_jpegli_available = models.BooleanField(default=False)
-    model_version = models.IntegerField(default=1)
     height = models.IntegerField(default=0)
     width = models.IntegerField(default=0)
     version = models.IntegerField(default=2)
@@ -35,7 +31,7 @@ class Image(models.Model):
     def backblaze_filepath(self):
         return f"{self.id.hex[:2]}/{self.id.hex[2:4]}/{self.id.hex}"
 
-    def create_variant_tasks(self, variant, image_data: bytes):
+    def create_variant_tasks(self, variant, image_data: BytesIO):
         avif_variant = ImageVariant(
             image=variant.image,
             height=variant.height,
@@ -49,9 +45,7 @@ class Image(models.Model):
 
         avif_variant.save()
 
-        send_image_to_worker(image_variant=avif_variant, image_data=image_data)
-
-        ImageVariant(
+        webp_variant = ImageVariant(
             image=variant.image,
             height=variant.height,
             width=variant.width,
@@ -60,7 +54,11 @@ class Image(models.Model):
             gaussian_blur=variant.gaussian_blur,
             brightness=variant.brightness,
             available=False,
-        ).save()
+        )
+        webp_variant.save()
+
+        send_image_to_worker(image_variant=avif_variant, image_data=image_data)
+        send_image_to_worker(image_variant=webp_variant, image_data=image_data)
 
     def download_original_variant(self):
         bucket = get_b2_resource()
@@ -69,7 +67,7 @@ class Image(models.Model):
         original_variant = self.imagevariant_set.filter(is_primary_variant=True).first()
 
         bucket.download_fileobj(
-            original_variant.backblaze_filepath,
+            original_variant.s3_filepath,
             original_image,
         )
         original_image.seek(0)
@@ -140,13 +138,14 @@ class Image(models.Model):
 
         bucket.upload_fileobj(
             resized_image,
-            image_variant.backblaze_filepath,
+            image_variant.s3_filepath,
             ExtraArgs={"ContentType": content_type},
         )
 
         image_variant.save()
 
-        self.create_variant_tasks(image_variant)
+        resized_image.seek(0)
+        self.create_variant_tasks(image_variant, image_data=resized_image)
 
         return image_variant
 
@@ -162,10 +161,9 @@ class ImageVariant(models.Model):
     is_full_size = models.BooleanField(default=False)
     file_type = models.CharField(max_length=10)
     available = models.BooleanField(default=False)
-    regenerate = models.BooleanField(default=False)
 
     @property
-    def backblaze_filepath(self):
+    def s3_filepath(self):
         return f"{self.id.hex[:2]}/{self.id.hex[2:4]}/{self.id.hex}.{self.file_type}"
 
     @property
@@ -178,21 +176,6 @@ class ImageVariant(models.Model):
             brightness=self.brightness,
             file_type__in=["jpg", "png"],
         ).first()
-
-    def save(self, **kwargs):
-        super().save(**kwargs)
-
-
-class ImageVariantTask(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    height = models.IntegerField()
-    width = models.IntegerField()
-    gaussian_blur = models.FloatField(default=0)
-    brightness = models.FloatField(default=1)
-    original_file_type = models.CharField(max_length=10)
-    file_type = models.CharField(max_length=10)
 
 
 class AuthorizationKey(models.Model):
