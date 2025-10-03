@@ -30,18 +30,23 @@ FROM alpine:3.22
 
 COPY --from=avifbuilder /libavif/build/avifenc /usr/bin/avifenc
 
-RUN apk add curl
+RUN apk add curl libwebp libwebp-tools
 RUN adduser -D kakigoori
-RUN mkdir /kakigoori-avif
-RUN chown kakigoori:kakigoori /kakigoori-avif
+RUN mkdir /kakigoori
+RUN chown kakigoori:kakigoori /kakigoori
 
 USER kakigoori
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/home/kakigoori/.local/bin/:$PATH"
 
-WORKDIR /kakigoori-avif
+WORKDIR /kakigoori
 
 COPY main.py .
+COPY pyproject.toml .
+
+RUN uv sync
+
+ENV PYTHONUNBUFFERED=1
 
 CMD ["uv", "run", "main.py"]

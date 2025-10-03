@@ -1,4 +1,4 @@
-name: Build AVIF worker Docker image
+name: Build worker Docker image
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: avif_worker
+    working-directory: worker
 
 jobs:
   acls:
@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: git.prettysunflower.moe/prettysunflower/kakigoori-avif-worker
+          images: git.prettysunflower.moe/prettysunflower/kakigoori-worker
       -
         name: Login to Gitea Container Hub
         uses: docker/login-action@v3
@@ -41,7 +41,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:avif_worker"
+          context: "{{defaultContext}}:worker"
           push: ${{ gitea.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
