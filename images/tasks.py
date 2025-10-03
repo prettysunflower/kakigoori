@@ -31,6 +31,8 @@ def send_image_to_worker(image_variant, image_data: BytesIO | None = None):
 
     if image_variant.file_type == "avif":
         queue = "kakigoori_avif"
+    elif image_variant.file_type == "webp":
+        queue = "kakigoori_webp"
     else:
         return
 
