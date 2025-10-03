@@ -118,15 +118,13 @@ def image_with_size(request, image, width, height, image_type):
         width=width,
         gaussian_blur=gaussian_blur,
         brightness=brightness,
+        available=True,
     )
     if image_type != "auto":
         if image_type == "original":
             image_variants = image_variants.filter(file_type__in=["jpg", "png"])
         else:
             image_variants = image_variants.filter(file_type=image_type)
-
-    if image.version == 3:
-        image_variants = image_variants.filter(available=True)
 
     variants = image_variants.all()
 
@@ -143,7 +141,7 @@ def image_with_size(request, image, width, height, image_type):
             )
 
     if image_type == "auto":
-        variants_preferred_order = ["avif", "webp", "jpegli", "jpg", "png"]
+        variants_preferred_order = ["avif", "webp", "jpg", "png"]
     elif image_type == "original":
         variants_preferred_order = ["jpg", "png"]
     else:
@@ -171,16 +169,6 @@ def image_with_size(request, image, width, height, image_type):
             continue
 
         variant = variant[0]
-
-        if image.version == 2:
-            if file_type == "jpegli":
-                file_name = "jpegli.jpg"
-            else:
-                file_name = "image." + file_type
-
-            return redirect(
-                f"{settings.S3_PUBLIC_BASE_PATH}/{image.s3_filepath}/{variant.width}-{variant.height}/{file_name}"
-            )
 
         return redirect(f"{settings.S3_PUBLIC_BASE_PATH}/{variant.s3_filepath}")
 
