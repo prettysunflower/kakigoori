@@ -15,6 +15,8 @@ from pathlib import Path
 
 import pika
 
+from kakigoori.utils import get_env_boolean, get_env_or_raise
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,9 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-DEBUG = os.environ.get("DEBUG", False)
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
-SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = get_env_boolean("DEBUG")
+
+ALLOWED_HOSTS = [str(x) for x in os.getenv("ALLOWED_HOSTS", "").split(",")]
+if os.getenv("KUBERNETES_POD_ID"):
+    ALLOWED_HOSTS.append(os.getenv("KUBERNETES_POD_ID"))
+
+SECRET_KEY = get_env_or_raise("KAKIGOORI_SECRET_KEY")
 
 # Application definition
 
@@ -122,17 +128,11 @@ LOGGING = {
     },
 }
 
+# RabbitMQ Config
 
-def environ_get_or_raise(env_var):
-    var = os.environ.get(env_var)
-    if var is None:
-        raise EnvironmentError(f"Environment variable {env_var} not set")
-    return var
+RABBITMQ_HOST = get_env_or_raise("RABBITMQ_HOST")
 
-
-RABBITMQ_HOST = environ_get_or_raise("RABBITMQ_HOST")
-
-RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT")
+RABBITMQ_PORT = os.getenv("RABBITMQ_PORT")
 if not RABBITMQ_PORT:
     RABBITMQ_PORT = 5672
 
@@ -140,27 +140,31 @@ RABBITMQ_CONNECTION_PARAMETERS = pika.ConnectionParameters(
     host=RABBITMQ_HOST, port=RABBITMQ_PORT
 )
 
-if os.environ.get("RABBITMQ_USER") and os.environ.get("RABBITMQ_PASSWORD"):
-    RABBITMQ_USER = os.environ.get("RABBITMQ_USER")
-    RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD")
+if os.getenv("RABBITMQ_USER") and os.getenv("RABBITMQ_PASSWORD"):
+    RABBITMQ_USER = os.getenv("RABBITMQ_USER")
+    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
     RABBITMQ_CONNECTION_PARAMETERS.credentials = pika.PlainCredentials(
         username=RABBITMQ_USER, password=RABBITMQ_PASSWORD
     )
 
-if os.environ.get("RABBITMQ_VHOST"):
-    RABBITMQ_CONNECTION_PARAMETERS.virtual_host = os.environ.get("RABBITMQ_VHOST")
+if os.getenv("RABBITMQ_VHOST"):
+    RABBITMQ_CONNECTION_PARAMETERS.virtual_host = os.getenv("RABBITMQ_VHOST")
 
-S3_ENDPOINT = environ_get_or_raise("S3_ENDPOINT")
-S3_KEY_ID = environ_get_or_raise("S3_KEY_ID")
-S3_SECRET_KEY = environ_get_or_raise("S3_SECRET_KEY")
-S3_BUCKET = environ_get_or_raise("S3_BUCKET")
-S3_PUBLIC_BASE_PATH = environ_get_or_raise("S3_PUBLIC_BASE_PATH")
+# S3 Config
 
-POSTGRES_HOST = environ_get_or_raise("POSTGRES_HOST")
-POSTGRES_USER = environ_get_or_raise("POSTGRES_USER")
-POSTGRES_PASSWORD = environ_get_or_raise("POSTGRES_PASSWORD")
-POSTGRES_DB = environ_get_or_raise("POSTGRES_DB")
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "5432")
+S3_ENDPOINT = get_env_or_raise("S3_ENDPOINT")
+S3_KEY_ID = get_env_or_raise("S3_KEY_ID")
+S3_SECRET_KEY = get_env_or_raise("S3_SECRET_KEY")
+S3_BUCKET = get_env_or_raise("S3_BUCKET")
+S3_PUBLIC_BASE_PATH = get_env_or_raise("S3_PUBLIC_BASE_PATH")
+
+# Postgres config
+
+POSTGRES_HOST = get_env_or_raise("POSTGRES_HOST")
+POSTGRES_USER = get_env_or_raise("POSTGRES_USER")
+POSTGRES_PASSWORD = get_env_or_raise("POSTGRES_PASSWORD")
+POSTGRES_DB = get_env_or_raise("POSTGRES_DB")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
 
 DATABASES = {
     "default": {
@@ -173,11 +177,13 @@ DATABASES = {
     }
 }
 
-if os.environ.get("SENTRY_DSN"):
+# Sentry
+
+if os.getenv("SENTRY_DSN"):
     import sentry_sdk
 
     sentry_sdk.init(
-        dsn=os.environ.get("SENTRY_DSN"),
+        dsn=os.getenv("SENTRY_DSN"),
         max_breadcrumbs=50,
         enable_logs=True,
         traces_sample_rate=1.0,
