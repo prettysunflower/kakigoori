@@ -22,8 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-ALLOWED_HOSTS = []
-
+DEBUG = os.environ.get("DEBUG", False)
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # Application definition
 
@@ -66,18 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "kakigoori.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -119,9 +108,29 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
-if not RABBITMQ_HOST:
-    raise ValueError("RABBITMQ_HOST environment variable is not set")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
+
+
+def environ_get_or_raise(env_var):
+    var = os.environ.get(env_var)
+    if var is None:
+        raise EnvironmentError(f"Environment variable {env_var} not set")
+    return var
+
+
+RABBITMQ_HOST = environ_get_or_raise("RABBITMQ_HOST")
 
 RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT")
 if not RABBITMQ_PORT:
@@ -141,4 +150,35 @@ if os.environ.get("RABBITMQ_USER") and os.environ.get("RABBITMQ_PASSWORD"):
 if os.environ.get("RABBITMQ_VHOST"):
     RABBITMQ_CONNECTION_PARAMETERS.virtual_host = os.environ.get("RABBITMQ_VHOST")
 
-from .local_settings import *
+S3_ENDPOINT = environ_get_or_raise("S3_ENDPOINT")
+S3_KEY_ID = environ_get_or_raise("S3_KEY_ID")
+S3_SECRET_KEY = environ_get_or_raise("S3_SECRET_KEY")
+S3_BUCKET = environ_get_or_raise("S3_BUCKET")
+S3_PUBLIC_BASE_PATH = environ_get_or_raise("S3_PUBLIC_BASE_PATH")
+
+POSTGRES_HOST = environ_get_or_raise("POSTGRES_HOST")
+POSTGRES_USER = environ_get_or_raise("POSTGRES_USER")
+POSTGRES_PASSWORD = environ_get_or_raise("POSTGRES_PASSWORD")
+POSTGRES_DB = environ_get_or_raise("POSTGRES_DB")
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "5432")
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": POSTGRES_DB,
+        "USER": POSTGRES_USER,
+        "PASSWORD": POSTGRES_PASSWORD,
+        "HOST": POSTGRES_HOST,
+        "PORT": POSTGRES_PORT,
+    }
+}
+
+if os.environ.get("SENTRY_DSN"):
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_DSN"),
+        max_breadcrumbs=50,
+        enable_logs=True,
+        traces_sample_rate=1.0,
+    )

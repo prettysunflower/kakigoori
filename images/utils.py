@@ -10,7 +10,7 @@ def get_b2_resource():
         service_name="s3",
         endpoint_url=settings.S3_ENDPOINT,
         aws_access_key_id=settings.S3_KEY_ID,
-        aws_secret_access_key=settings.S3_ACCESS_KEY,
+        aws_secret_access_key=settings.S3_SECRET_KEY,
         config=Config(signature_version="s3v4"),
     )
 
