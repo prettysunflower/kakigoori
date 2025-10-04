@@ -23,7 +23,7 @@ class Command(BaseCommand):
         bucket = get_b2_resource()
 
         for image in images_list:
-            image_downloaded = []
+            image_downloaded = {}
 
             for variant in image.imagevariant_set.all():
                 print(f"Processing variant {variant.id}")
@@ -36,11 +36,11 @@ class Command(BaseCommand):
 
                 if variant.file_type == "webp" or variant.file_type == "avif":
                     if (
-                        variant.parent_variant_for_optimized_versions.id
+                        str(variant.parent_variant_for_optimized_versions.id)
                         in image_downloaded
                     ):
                         image_data = image_downloaded[
-                            variant.parent_variant_for_optimized_versions.id
+                            str(variant.parent_variant_for_optimized_versions.id)
                         ]
                     else:
                         image_data = BytesIO()
@@ -49,7 +49,7 @@ class Command(BaseCommand):
                             image_data,
                         )
                         image_downloaded[
-                            variant.parent_variant_for_optimized_versions.id
+                            str(variant.parent_variant_for_optimized_versions.id)
                         ] = image_data
 
                     image_data.seek(0)
