@@ -44,10 +44,13 @@ class Command(BaseCommand):
                         ]
                     else:
                         image_data = BytesIO()
-                        bucket.download_fileobj(
-                            variant.parent_variant_for_optimized_versions.s3_filepath,
-                            image_data,
-                        )
+                        try:
+                            bucket.download_fileobj(
+                                variant.parent_variant_for_optimized_versions.s3_filepath,
+                                image_data,
+                            )
+                        except:
+                            continue
                         image_downloaded[
                             str(variant.parent_variant_for_optimized_versions.id)
                         ] = image_data
@@ -55,13 +58,15 @@ class Command(BaseCommand):
                     image_data.seek(0)
                     send_image_to_worker(image_variant=variant, image_data=image_data)
                     continue
-
-                image, file_extension = variant.image.create_resized_image(
-                    variant.height,
-                    variant.width,
-                    variant.gaussian_blur,
-                    variant.brightness,
-                )
+                try:
+                    image, file_extension = variant.image.create_resized_image(
+                        variant.height,
+                        variant.width,
+                        variant.gaussian_blur,
+                        variant.brightness,
+                    )
+                except:
+                    continue
 
                 if file_extension == "jpg":
                     content_type = "image/jpeg"
