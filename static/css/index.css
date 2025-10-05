@@ -1,4 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: local("JetBrains Mono"), url("/static/fonts/JetBrainsMono.woff2") format("woff2"), url("/static/fonts/JetBrainsMono.ttf") format("truetype");
+}
+/* latin */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: local("JetBrains Mono Italic"), url("/static/fonts/JetBrainsMono-Italic.woff2") format("woff2"), url("/static/fonts/JetBrainsMono-Italic.ttf") format("truetype");
+}
 body {
   font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background-color: oklch(97.35% 0.0261 90.1deg);
@@ -179,7 +194,8 @@ main #examples #examples-grid figcaption {
   text-align: center;
   padding: 0.5rem;
 }
-main #examples #examples-grid figcaption::selection, main #examples #examples-grid figcaption ::selection {
+main #examples #examples-grid figcaption::selection,
+main #examples #examples-grid figcaption ::selection {
   background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.2) c h);
 }
 main #qa {
@@ -209,10 +225,14 @@ main #qa details[open] {
   background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
   padding: 1rem;
 }
-main #qa details[open]::selection, main #qa details[open] ::selection {
+main #qa details[open]::selection,
+main #qa details[open] ::selection {
   background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.3) c h);
 }
-main #qa details[open] a, main #qa details[open] a:visited, main #qa details[open] a:hover, main #qa details[open] a:active {
+main #qa details[open] a,
+main #qa details[open] a:visited,
+main #qa details[open] a:hover,
+main #qa details[open] a:active {
   color: white;
 }
 
