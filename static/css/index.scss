@@ -51,9 +51,30 @@ header {
     grid-template-columns: 1.5fr 1fr;
     margin-bottom: 2rem;
 
+    @media (width <= 992px) {
+        display: flex;
+        flex-direction: column;
+        margin-right: 0;
+
+        .background-image {
+            width: 100%;
+            aspect-ratio: 1.33;
+            margin-right: 0 !important;
+            border-bottom-right-radius: 1em !important;
+            border-bottom-left-radius: 1em;
+        }
+
+        .headline {
+            width: 90%;
+            margin: 0 auto;
+        }
+    }
+
+
     h1 {
         font-weight: 900;
         margin-bottom: 0;
+        margin-top: 0;
         font-size: 3rem;
     }
 
@@ -92,6 +113,11 @@ main {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         margin-bottom: 2rem;
+
+        @media (width <= 992px) {
+            display: flex;
+            flex-direction: column;
+        }
 
         mark {
             display: inline-block;
@@ -155,6 +181,11 @@ main {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
+
+            @media (width <= 992px) {
+                display: flex;
+                flex-direction: column;
+            }
 
             img {
                 width: 100%;
