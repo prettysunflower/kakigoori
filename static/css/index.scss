@@ -298,4 +298,8 @@ footer {
     p {
         margin: 0;
     }
+
+    ::selection {
+        background-color: oklch(from $cyan calc(l - 0.2) c h);
+    }
 }
