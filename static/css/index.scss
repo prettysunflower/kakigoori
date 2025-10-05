@@ -175,6 +175,7 @@ main {
             padding: 1rem;
             font-family: "JetBrains Mono", monospace;
             font-weight: 600;
+            overflow-y: scroll;
 
             ::selection {
                 background-color: oklch(0.3092 0.0518 219.65);
