@@ -1,6 +1,6 @@
 FROM alpine:3.22
 
-RUN apk add curl python3 exiftool
+RUN apk add curl python3 exiftool git
 RUN adduser -D kakigoori
 
 USER kakigoori
@@ -10,9 +10,19 @@ ENV PATH="/home/kakigoori/.local/bin/:$PATH"
 
 WORKDIR /kakigoori
 
-COPY . .
+COPY --chown=1000:1000 . .
 
 RUN uv sync --group prod
+
+RUN git config --global --add safe.directory /kakigoori
+RUN echo VERSION=\"$(git describe --tag)\" > kakigoori/version.py
+
+USER root
+
+RUN apk del git
+RUN rm -rf .git
+
+USER prettysunflower
 
 ENTRYPOINT ["/home/kakigoori/.local/bin/uv", "run", "gunicorn"]
 CMD ["-w", "4", "kakigoori.wsgi", "-b", "0.0.0.0:8001"]

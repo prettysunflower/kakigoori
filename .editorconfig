@@ -1,0 +1,4 @@
+root = true
+
+[{*.html,*.scss}]
+indent_size = 4

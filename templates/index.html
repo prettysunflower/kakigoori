@@ -2,191 +2,212 @@
 
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kakigoori</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/index.css' %}"
-    />
-  </head>
-  <body>
-    <header>
-      <div>
-        <img
-          src="https://kakigoori.dev/bcf6fdd9-3855-4f4d-9b5a-0791e14e29c7/auto"
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Kakigoori</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/index.css' %}?version=2"
         />
-      </div>
-      <div>
-        <h1>Kakigoori</h1>
-        <p>Image distribution for the web, simplified</p>
-        <p>
-          A project by
-          <a href="https://prettysunflower.moe"
-            >the prettysunflower collective</a
-          >
-        </p>
-      </div>
-    </header>
+    </head>
+    <body>
+        <header>
+            <div class="background-image">
+            </div>
+            <div>
+                <div class="headline">
+                    <h1>Kakigoori</h1>
+                    <p>Image distribution for the web, simplified</p>
+                    <p>
+                        A project by
+                        <a href="https://prettysunflower.moe"
+                            >the prettysunflower system</a
+                        >
+                    </p>
+                </div>
+            </div>
+        </header>
 
-    <main>
-      <div class="container">
-        <h2>Upload an image once, use it everywhere on the web</h2>
-        <p>
-          Kakigoori is an picture distribution system to publish images on the
-          web. Upload it once, and Kakigoori will create versions of the image
-          optimized for the web (AVIF, WebP). You can also request for custom
-          sized images (JPG/PNG versions will be generated on the fly, and the
-          other versions will be created within a few minutes).
-        </p>
-        <p>
-          Kakigoori's images are stored by Tigris. No matter where you are in
-          the world, images stored by Kakigoori will display as fast as
-          possible.
-        </p>
+        <main>
+            <div class="container">
+                <div class="description">
+                    <div>
+                        <h2>Upload an image <mark class="green">once</mark>,<br>Use it <mark>everywhere</mark> on the web</h2>
+                        <p>
+                            Kakigoori is an picture distribution system to publish
+                            images on the web. Upload it once, and Kakigoori will
+                            create versions of the image optimized for the web
+                            (AVIF, WebP). You can also request for custom sized
+                            images (JPG/PNG versions will be generated on the fly,
+                            and the other versions will be created within a few
+                            minutes).
+                        </p>
+                        <p>
+                            Kakigoori's images are stored by Tigris. No matter where
+                            you are in the world, images stored by Kakigoori will
+                            display as fast as possible.
+                        </p>
+                    </div>
+                    <div>
+                        <p>Request</p>
+                        <pre><code>curl \
+    -X "POST" \
+    "https://kakigoori.dev/upload" \
+    -H "Authorization: $KAKIGOORI_API_KEY" \
+    -H 'Content-Type: multipart/form-data; charset=utf-8' \
+    -F "file=image.jpg"</code></pre>
+                        <p>Response</p>
+                        <pre><code>{
+    "created": true,
+    "id": "5e858871-ede8-4f05-972c-abcfd10fcb64"
+}</code></pre>
+                    </div>
+                </div>
+            </div>
 
-        <hr />
+            <div class="magenta" id="examples">
+                <div class="container">
+                    <h2>Examples</h2>
 
-        <h2>Examples</h2>
+                    <div id="examples-grid">
+                        <figure>
+                            <img
+                                src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/original"
+                            />
+                            <figcaption>
+                                /original<br>
+                                JPEG<br>
+                                <em>(6.78 MB)</em>
+                            </figcaption>
+                        </figure>
+                        <figure>
+                            <img
+                                src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto"
+                            />
+                            <figcaption>
+                                /auto<br>
+                                Detect the best format compatible with the browser
+                            </figcaption>
+                        </figure>
+                        <figure>
+                            <img
+                                src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/avif"
+                            />
+                            <figcaption>
+                                /avif<br>
+                                AVIF (aom, yuv444, s4, q50, cq35)<br>
+                                <em>(430.67 kB)</em>
+                            </figcaption>
+                        </figure>
+                        <figure>
+                            <img
+                                src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/webp"
+                            />
+                            <figcaption>
+                                /webp<br>
+                                WebP (yuv420, q75)<br>
+                                <em>(463.44 kB)</em>
+                            </figcaption>
+                        </figure>
+                        <figure>
+                            <img
+                                src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/height/600/auto"
+                            />
+                            <figcaption>
+                                /height/600/auto<br>
+                                (Kakigoori also allows you to specify custom sizes for images)
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
 
-        <p>
-          We uploaded a picture on Kakigoori, and the system attributed the ID
-          5e858871-ede8-4f05-972c-abcfd10fcb64 to it!
-        </p>
+            <div class="cyan" id="qa">
+                <div class="container">
+                    <h2>Q&A</h2>
 
-        <div id="examples-grid">
-          <p>
-            <strong
-              >https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto</strong
-            ><br /><em
-              >(Will display AVIF images first if available and compatible with
-              your browser, or WebP images, or Jpeg images)</em
-            >
-          </p>
-          <img
-            src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto"
-          />
-          <p>
-            <strong
-              >https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/avif</strong
-            ><br /><em
-              >(Will request the AVIF version of the image, or will return a 404
-              error if the version is not available. You can replace avif here
-              with webp)</em
-            >
-          </p>
-          <img
-            src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/avif"
-          />
-          <p>
-            <strong
-              >https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/original</strong
-            ><br /><em
-              >(Will request the original image that was uploaded on
-              Kakigoori)</em
-            >
-          </p>
-          <img
-            src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/original"
-          />
-          <p>
-            <strong
-              >https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/height/600/auto</strong
-            ><br /><em
-              >(Will request the image with an height of 600px, and will request
-              the AVIF/WebP/Jpeg/PNG image depending on what is compatible with
-              the browser and what's available)</em
-            >
-          </p>
-          <img
-            src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/height/600/auto"
-            style="max-height: 300px"
-          />
-          <p>
-            <strong
-              >https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/width/600/auto</strong
-            ><br /><em>(Same thing, but with a width of 600px!)</em>
-          </p>
-          <img
-            src="https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/width/600/auto"
-            style="max-width: 300px"
-          />
-        </div>
+                <details>
+                    <summary>Who is using Kakigoori?</summary>
+                    Our websites all have their images stored on Kakigoori! We
+                    also use Kakigoori on some projects we worked on
+                    professionally.
+                </details>
 
-        <hr />
+                <details>
+                    <summary>Can I upload images to Kakigoori?</summary>
 
-        <h2>Q&A</h2>
+                    Well... currently, We're kind of concerned about opening
+                    upload to anyone (We wouldn't want to have Tigris sending us
+                    a nasty bill for using too much storage, or having them send
+                    us a gentle email to ask why the fuck we're hosting illicit
+                    content ^^).<br />
+                    So, our default answer is no, but if you're really
+                    interested to use Kakigoori, either self-host Kakigoori
+                    yourself, or if you want to use this hosted version and
+                    you're a friendly person, please send us an email to
+                    <a href="mailto:me@prettysunflower.moe"
+                        >me@prettysunflower.moe</a
+                    >
+                    and we will see what we can do for you!<br />
+                    Also, Koumbit people, you have an uploading key, please
+                    check the Wiki! ^^
+                </details>
 
-        <details>
-          <summary>Who is using Kakigoori?</summary>
-          Our websites all have their images stored on Kakigoori! We also use
-          Kakigoori on some projects we worked on professionally.
-        </details>
+                <details>
+                    <summary>How private is Kakigoori?</summary>
+                    <p>
+                        We're tired of bots and AI scrappers hitting our
+                        servers, so, requests to the service are passed through
+                        <a href="https://anubis.techaro.lol/">Anubis</a>, and if
+                        your request is challenged, a cookie will be placed to
+                        remember you passed the challenged.
+                    </p>
+                    <p>
+                        Otherwise, we're not collecting data other than what is
+                        submitted to us (images!), so... it should be pretty
+                        private ^^
+                    </p>
+                </details>
 
-        <details>
-          <summary>Can I upload images to Kakigoori?</summary>
-          Well... currently, We're kind of concerned about opening upload to
-          anyone (We wouldn't want to have Tigris sending us a nasty bill for
-          using too much storage, or having them send us a gentle email to ask
-          why the fuck we're hosting illicit content ^^).<br />
-          So, our default answer is no, but if you're really interested to use
-          Kakigoori, either self-host Kakigoori yourself, or if you want to use
-          this hosted version and you're a friendly person, please send us an
-          email to
-          <a href="mailto:me@prettysunflower.moe">me@prettysunflower.moe</a> and
-          we will see what we can do for you!<br />
-          Also, Koumbit people, you have an uploading key, please check the
-          Wiki! ^^
-        </details>
+                <details>
+                    <summary>Is Kakigoori open-source?</summary>
+                    Yes! Please see
+                    <a
+                        href="https://git.prettysunflower.moe/prettysunflower/kakigoori"
+                        >the git project for that!</a
+                    >
+                </details>
 
-        <details>
-          <summary>How private is Kakigoori?</summary>
-          <p>
-            We're tired of bots and AI scrappers hitting our servers, so,
-            requests to the service are passed through
-            <a href="https://anubis.techaro.lol/">Anubis</a>, and if your
-            request is challenged, a cookie will be placed to remember you
-            passed the challenged.
-          </p>
-          <p>
-            Otherwise, we're not collecting data other than what is submitted to
-            us (images!), so... it should be pretty private ^^
-          </p>
-        </details>
+                <details>
+                    <summary>Who is behind Kakigoori?</summary>
+                    We're the prettysunflower collective (alias, Remilia, Xeon
+                    and Takeno), your friendly nearby software developers and
+                    non-binary/plural trans women!
+                </details>
 
-        <details>
-          <summary>Is Kakigoori open-source?</summary>
-          Yes! Please see
-          <a href="https://git.prettysunflower.moe/prettysunflower/kakigoori"
-            >the git project for that!</a
-          >
-        </details>
+                <details>
+                    <summary>... why the name Kakigoori?</summary>
+                    Remilia was hungry when she created the project, and it was
+                    warm enough that she wanted some form of kakigoori.<br />
+                    Oh, and about the sunflowers?<br />
+                    They're pretty, we love them! (That's the only reason)
+                </details>
 
-        <details>
-          <summary>Who is behind Kakigoori?</summary>
-          We're the prettysunflower collective (alias, Remilia, Xeon and
-          Takeno), your friendly nearby software developers and
-          non-binary/plural trans women!
-        </details>
-
-        <details>
-          <summary>... why the name Kakigoori?</summary>
-          Remilia was hungry when she created the project, and it was warm
-          enough that she wanted some form of kakigoori.<br />
-          Oh, and about the sunflowers?<br />
-          They're pretty, we love them! (That's the only reason)
-        </details>
-
-        <details>
-          <summary>How can I contact you if I want?</summary>
-          Our email is always open (<a href="mailto:me@prettysunflower.moe"
-            >me@prettysunflower.moe</a
-          >). Do note we may be a bit slow to reply, as replying to people
-          scares us a bit ^^.
-        </details>
-      </div>
-    </main>
-  </body>
+                <details>
+                    <summary>How can I contact you if I want?</summary>
+                    Our email is always open (<a
+                        href="mailto:me@prettysunflower.moe"
+                        >me@prettysunflower.moe</a
+                    >). Do note we may be a bit slow to reply, as replying to
+                    people scares us a bit ^^.
+                </details>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>Kakigoori {{ VERSION }}{% if GIT_COMMIT %} ({{ GIT_COMMIT }}){% endif %}{% if DEBUG %} DEBUG{% endif %} - 🏳️‍⚧️ Trans rights are human rights 🏳️‍⚧️</p>
+        </footer>
+    </body>
 </html>

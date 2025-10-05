@@ -1,9 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  background-color: #fdf6e3;
+  font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: oklch(97.35% 0.0261 90.1deg);
   margin: 0;
+}
+body ::selection {
+  background-color: oklch(93.06% 0.026 92.4deg);
 }
 
 .container {
@@ -37,51 +39,160 @@ body {
 }
 
 header {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
   gap: 2rem;
-  padding: 3rem 1rem;
-  margin-bottom: 3rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  flex-wrap: wrap;
+  height: 80vh;
+  margin-right: 3rem;
+  grid-template-columns: 1.5fr 1fr;
+  margin-bottom: 2rem;
 }
-header div:has(img) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+header h1 {
+  font-weight: 900;
+  margin-bottom: 0;
+  font-size: 3rem;
 }
-header img {
-  width: 80%;
-  max-width: 300px;
+header h1 + p {
+  margin-top: 0.25em;
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+header h1 + p + p {
+  margin-top: 0.5em;
+  font-style: italic;
+}
+header hr {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+header .background-image {
+  margin-right: 1rem;
+  background-image: url("https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-bottom-right-radius: 2em;
 }
 
-main {
-  margin-bottom: 5rem;
-}
-main #examples-grid {
+main .description {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
-main #examples-grid p > strong {
-  word-break: break-all;
+main .description mark {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  margin: 0 0 0.25em;
+  color: white;
+  background-color: oklch(59.24% 0.2025 355.89deg);
 }
-@media (max-width: 768px) {
-  main #examples-grid {
-    grid-template-columns: 1fr;
-  }
+main .description mark::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
 }
-main #examples-grid img {
-  max-width: 100%;
+main .description mark.green {
+  background-color: oklch(64.44% 0.1508 118.6deg);
 }
-main details {
+main .description mark.green::selection {
+  background-color: oklch(54.44% 0.1508 118.6deg);
+}
+main .description pre {
+  background-color: oklch(26.73% 0.0486 219.82deg);
+  color: white;
+  padding: 1rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+}
+main .description pre ::selection {
+  background-color: oklch(30.92% 0.0518 219.65deg);
+}
+main .magenta {
+  background-color: oklch(59.24% 0.2025 355.89deg);
+  color: white;
+}
+main .magenta ::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
+}
+main .cyan {
+  background-color: oklch(64.37% 0.1019 187.38deg);
+  color: white;
+}
+main .cyan ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+}
+main #examples {
+  padding: 2rem 0;
+}
+main #examples h2 {
+  margin-top: 0;
+}
+main #examples #examples-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+main #examples #examples-grid img {
+  width: 100%;
+  aspect-ratio: 1.33;
+}
+main #examples #examples-grid figure {
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+}
+main #examples #examples-grid figcaption {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
+  text-align: center;
+  padding: 0.5rem;
+}
+main #examples #examples-grid figcaption::selection, main #examples #examples-grid figcaption ::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.2) c h);
+}
+main #qa {
+  padding: 2rem 0;
+}
+main #qa ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+}
+main #qa h2 {
+  margin-top: 0;
+}
+main #qa details {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+  cursor: pointer;
   margin-bottom: 1rem;
 }
-main hr {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+main #qa details summary {
+  padding: 1rem;
+}
+main #qa details ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+}
+main #qa details[open] summary {
+  padding: 0 0 1rem 0;
+}
+main #qa details[open] {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+  padding: 1rem;
+}
+main #qa details[open]::selection, main #qa details[open] ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.3) c h);
+}
+main #qa details[open] a, main #qa details[open] a:visited, main #qa details[open] a:hover, main #qa details[open] a:active {
+  color: white;
+}
+
+footer {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+footer p {
+  margin: 0;
 }
 
 /*# sourceMappingURL=index.css.map */

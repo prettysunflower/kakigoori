@@ -1,4 +1,5 @@
 import hashlib
+import os
 import random
 import string
 from io import BytesIO
@@ -21,12 +22,16 @@ from images.decorators import (
 )
 from images.models import Image, ImageVariant
 from images.utils import get_b2_resource, remove_exif_gps_data
+from kakigoori import version
 
 JpegImagePlugin._getmp = lambda x: None
 
 
 def index(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {
+        "DEBUG": settings.DEBUG,
+        "GIT_COMMIT": version.VERSION,
+    })
 
 
 @csrf_exempt
