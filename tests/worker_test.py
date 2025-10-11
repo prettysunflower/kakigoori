@@ -38,11 +38,7 @@ def setup(request):
     kakigoori_worker = DockerContainer(
         str(docker_image),
         env={
-            "RABBITMQ_HOST": rabbitmq_host,
-            "RABBITMQ_PORT": rabbitmq.port,
-            "RABBITMQ_USER": rabbitmq.username,
-            "RABBITMQ_PASSWORD": rabbitmq.password,
-            "RABBITMQ_VHOST": rabbitmq.vhost,
+            "RABBITMQ_ADDRESS": f"amqp://{rabbitmq_host}:{rabbitmq.port}/{rabbitmq.vhost}",
         },
         network=network,
     )

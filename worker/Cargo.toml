@@ -1,0 +1,13 @@
+[package]
+name = "kakigoori-worker"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+lapin = "4.0.0-rc.1"
+futures-lite = "2.6.1"
+tokio = { version = "1.47.1", features = ["rt", "macros"] }
+uuid = {version = "1.18.1", features = ["v4"]}
+serde_json = "1.0.145"
+serde = { version = "1.0.228", features = ["derive"] }
+base64 = "0.22.1"
