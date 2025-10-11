@@ -136,22 +136,34 @@ async fn connect_rabbit_mq() -> lapin::Result<Connection> {
     )
     .await?;
 
-    let avif_task = tokio::spawn(handle_file_type(
-        conn.create_channel().await?,
-        conn.create_channel().await?,
-        "kakigoori_avif",
-        file_processors::AVIF {},
-    ));
-    let webp_task = tokio::spawn(handle_file_type(
-        conn.create_channel().await?,
-        conn.create_channel().await?,
-        "kakigoori_webp",
-        file_processors::WebP {},
-    ));
+    let worker_file_types = std::env::var("WORKER_FILE_TYPES")
+        .unwrap_or_else(|_| "avif,webp".into())
+        .to_lowercase();
 
-    println!("Waiting for messages...");
+    let mut tasks = vec![];
+    for file_type in worker_file_types.split(',') {
+        match file_type {
+            "avif" => {
+                tasks.push(tokio::spawn(handle_file_type(
+                    conn.create_channel().await?,
+                    conn.create_channel().await?,
+                    "kakigoori_avif",
+                    file_processors::AVIF {},
+                )));
+            }
+            "webp" => {
+                tasks.push(tokio::spawn(handle_file_type(
+                    conn.create_channel().await?,
+                    conn.create_channel().await?,
+                    "kakigoori_webp",
+                    file_processors::WebP {},
+                )));
+            }
+            _ => {}
+        }
+    }
 
-    for task in [avif_task, webp_task] {
+    for task in tasks {
         task.await.map_err(std::io::Error::from)???;
     }
 
