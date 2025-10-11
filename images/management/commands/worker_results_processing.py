@@ -10,6 +10,8 @@ from images.models import ImageVariant
 from images.utils import get_b2_resource
 from kakigoori import settings
 
+import django
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,7 +30,11 @@ class Command(BaseCommand):
 
             logger.info("Processing variant {}".format(variant_id))
 
-            variant = ImageVariant.objects.filter(id=variant_id).first()
+            try:
+                variant = ImageVariant.objects.filter(id=variant_id).first()
+            except django.core.exceptions.ValidationError:
+                ch.basic_ack(delivery_tag=method.delivery_tag)
+                return
             if not variant:
                 logger.error("Variant not found")
                 ch.basic_ack(delivery_tag=method.delivery_tag)
