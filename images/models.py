@@ -136,8 +136,12 @@ class Image(models.Model):
 
         image_variant.file_type = file_extension
 
+        # We're making a copy here because we had errors that the next seek was failing because resized_image
+        # was closed.
+        s3_copy = BytesIO(resized_image.read())
+
         bucket.upload_fileobj(
-            resized_image,
+            s3_copy,
             image_variant.s3_filepath,
             ExtraArgs={"ContentType": content_type},
         )
@@ -145,6 +149,7 @@ class Image(models.Model):
         image_variant.save()
 
         resized_image.seek(0)
+
         self.create_variant_tasks(image_variant, image_data=resized_image)
 
         return image_variant
