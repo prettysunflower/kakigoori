@@ -1,25 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
-
 @font-face {
     font-family: "JetBrains Mono";
     font-style: normal;
     font-weight: 100 800;
     font-display: swap;
-    src:
-        local("JetBrains Mono"),
-        url("/static/fonts/JetBrainsMono.woff2") format("woff2"),
-        url("/static/fonts/JetBrainsMono.ttf") format("truetype");
+    src: local("JetBrains Mono"),
+    url("/static/fonts/JetBrainsMono.woff2") format("woff2"),
+    url("/static/fonts/JetBrainsMono.ttf") format("truetype");
 }
+
 /* latin */
 @font-face {
     font-family: "JetBrains Mono";
     font-style: italic;
     font-weight: 100 800;
     font-display: swap;
-    src:
-        local("JetBrains Mono Italic"),
-        url("/static/fonts/JetBrainsMono-Italic.woff2") format("woff2"),
-        url("/static/fonts/JetBrainsMono-Italic.ttf") format("truetype");
+    src: local("JetBrains Mono Italic"),
+    url("/static/fonts/JetBrainsMono-Italic.woff2") format("woff2"),
+    url("/static/fonts/JetBrainsMono-Italic.ttf") format("truetype");
 }
 
 $magenta: oklch(0.5924 0.2025 355.89);
@@ -27,18 +24,17 @@ $cyan: oklch(0.6437 0.1019 187.38);
 $background-color: oklch(0.9735 0.0261 90.1);
 
 body {
-    font-family:
-        "JetBrains Mono",
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif,
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Segoe UI Symbol";
+    font-family: "JetBrains Mono",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
     background-color: $background-color;
     margin: 0;
 
@@ -126,14 +122,84 @@ header {
 
     .background-image {
         margin-right: 1rem;
-        background-image: url("https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
+        background: radial-gradient(at 100% 86%, #9e968c, #00000000 50%),
+        radial-gradient(at 100% 71%, #a39584, #00000000 50%),
+        radial-gradient(at 100% 100%, #999791, #00000000 50%),
+        radial-gradient(at 100% 57%, #a5927c, #00000000 50%),
+        radial-gradient(at 100% 43%, #a28f75, #00000000 50%),
+        radial-gradient(at 100% 29%, #9d8c70, #00000000 50%),
+        radial-gradient(at 100% 14%, #978a6e, #00000000 50%),
+        radial-gradient(at 100% 0, #95896d, #00000000 50%),
+        radial-gradient(at 86% 0, #9d8556, #00000000 50%),
+        radial-gradient(at 86% 14%, #9d8455, #00000000 50%),
+        radial-gradient(at 86% 100%, #91856e, #00000000 50%),
+        radial-gradient(at 86% 86%, #928269, #00000000 50%),
+        radial-gradient(at 86% 29%, #9b8154, #00000000 50%),
+        radial-gradient(at 86% 71%, #947f61, #00000000 50%),
+        radial-gradient(at 86% 43%, #987f56, #00000000 50%),
+        radial-gradient(at 86% 57%, #967e5a, #00000000 50%),
+        radial-gradient(at 29% 43%, #9a7e45, #00000000 50%),
+        radial-gradient(at 71% 0, #a38118, #00000000 50%),
+        radial-gradient(at 29% 57%, #997c49, #00000000 50%),
+        radial-gradient(at 71% 14%, #a17f13, #00000000 50%),
+        radial-gradient(at 29% 29%, #957b41, #00000000 50%),
+        radial-gradient(at 57% 0, #a17f00, #00000000 50%),
+        radial-gradient(at 43% 43%, #a17f00, #00000000 50%),
+        radial-gradient(at 57% 14%, #a17e00, #00000000 50%),
+        radial-gradient(at 43% 29%, #9e7f00, #00000000 50%),
+        radial-gradient(at 14% 43%, #8a7370, #00000000 50%),
+        radial-gradient(at 29% 71%, #90764d, #00000000 50%),
+        radial-gradient(at 14% 57%, #887371, #00000000 50%),
+        radial-gradient(at 57% 29%, #9f7c00, #00000000 50%),
+        radial-gradient(at 43% 57%, #9e7c00, #00000000 50%),
+        radial-gradient(at 29% 14%, #8e773f, #00000000 50%),
+        radial-gradient(at 14% 29%, #877170, #00000000 50%),
+        radial-gradient(at 43% 14%, #9a7d00, #00000000 50%),
+        radial-gradient(at 71% 29%, #9c7a02, #00000000 50%),
+        radial-gradient(at 43% 0, #987c00, #00000000 50%),
+        radial-gradient(at 29% 0, #8b753e, #00000000 50%),
+        radial-gradient(at 57% 43%, #9c7800, #00000000 50%),
+        radial-gradient(at 0 43%, #816d7e, #00000000 50%),
+        radial-gradient(at 14% 14%, #826e6f, #00000000 50%),
+        radial-gradient(at 14% 71%, #806e72, #00000000 50%),
+        radial-gradient(at 0 29%, #7f6c7e, #00000000 50%),
+        radial-gradient(at 0 57%, #7e6c7e, #00000000 50%),
+        radial-gradient(at 14% 0, #806d6f, #00000000 50%),
+        radial-gradient(at 43% 71%, #967500, #00000000 50%),
+        radial-gradient(at 0 14%, #7c697e, #00000000 50%),
+        radial-gradient(at 71% 43%, #967400, #00000000 50%),
+        radial-gradient(at 0 0, #7b697e, #00000000 50%),
+        radial-gradient(at 71% 100%, #897130, #00000000 50%),
+        radial-gradient(at 57% 57%, #977300, #00000000 50%),
+        radial-gradient(at 29% 86%, #816c50, #00000000 50%),
+        radial-gradient(at 0 71%, #76687e, #00000000 50%),
+        radial-gradient(at 71% 86%, #896f25, #00000000 50%),
+        radial-gradient(at 71% 57%, #906f00, #00000000 50%),
+        radial-gradient(at 14% 86%, #726773, #00000000 50%),
+        radial-gradient(at 71% 71%, #8b6d12, #00000000 50%),
+        radial-gradient(at 57% 71%, #906d00, #00000000 50%),
+        radial-gradient(at 43% 86%, #896c00, #00000000 50%),
+        radial-gradient(at 0 86%, #6a637e, #00000000 50%),
+        radial-gradient(at 57% 86%, #896900, #00000000 50%),
+        radial-gradient(at 29% 100%, #716252, #00000000 50%),
+        radial-gradient(at 14% 100%, #645f73, #00000000 50%),
+        radial-gradient(at 57% 100%, #836500, #00000000 50%),
+        radial-gradient(at 0 100%, #5e5e7e, #00000000 50%),
+        radial-gradient(at 43% 100%, #7c6300, #00000000 50%);
         height: 100%;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         //border-top-right-radius: 2em;
         border-bottom-right-radius: 2em;
+        overflow: hidden;
+
+        & > div {
+            height: 100%;
+            width: 100%;
+            background-image: url("https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
     }
 }
 

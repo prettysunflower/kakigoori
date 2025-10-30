@@ -1,1 +1,258 @@
-@import"https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap";@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:local("JetBrains Mono"),url("/static/fonts/JetBrainsMono.woff2") format("woff2"),url("/static/fonts/JetBrainsMono.ttf") format("truetype")}@font-face{font-family:"JetBrains Mono";font-style:italic;font-weight:100 800;font-display:swap;src:local("JetBrains Mono Italic"),url("/static/fonts/JetBrainsMono-Italic.woff2") format("woff2"),url("/static/fonts/JetBrainsMono-Italic.ttf") format("truetype")}body{font-family:"JetBrains Mono",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";background-color:oklch(.9735 .0261 90.1);margin:0}body ::selection{background-color:oklch(.9306 .026 92.4)}.container{width:95%;margin:0 auto}@media(min-width: 576px){.container{width:540px}}@media(min-width: 768px){.container{width:720px}}@media(min-width: 992px){.container{width:960px}}@media(min-width: 1200px){.container{width:1140px}}@media(min-width: 1400px){.container{width:1320px}}header{display:grid;justify-content:center;align-items:center;gap:2rem;height:80vh;margin-right:3rem;grid-template-columns:1.5fr 1fr;margin-bottom:2rem}@media(width <= 992px){header{display:flex;flex-direction:column;margin-right:0}header .background-image{width:100%;aspect-ratio:1.33;margin-right:0 !important;border-bottom-right-radius:1em !important;border-bottom-left-radius:1em}header .headline{width:90%;margin:0 auto}}header h1{font-weight:900;margin-bottom:0;margin-top:0;font-size:3rem}header h1+p{margin-top:.25em;margin-bottom:0;font-size:1.25rem;font-weight:bold}header h1+p+p{margin-top:.5em;font-style:italic}header hr{border:1px solid rgba(0,0,0,.1)}header .background-image{margin-right:1rem;background-image:url("https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto");background-repeat:no-repeat;background-position:center;background-size:cover;height:100%;box-shadow:rgba(0,0,0,.24) 0px 3px 8px;border-bottom-right-radius:2em}main .description{display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;margin-bottom:2rem}@media(width <= 992px){main .description{display:flex;flex-direction:column}}main .description mark{display:inline-block;padding:.25em .5em;margin:0 0 .25em;color:#fff;background-color:oklch(.5924 .2025 355.89)}main .description mark::selection{background-color:oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h)}main .description mark.green{background-color:oklch(.6444 .1508 118.6)}main .description mark.green::selection{background-color:oklch(.5444 .1508 118.6)}main .description pre{background-color:oklch(.2673 .0486 219.82);color:#fff;padding:1rem;font-family:"JetBrains Mono",monospace;font-weight:600;overflow-y:scroll}main .description pre ::selection{background-color:oklch(.3092 .0518 219.65)}main .magenta{background-color:oklch(.5924 .2025 355.89);color:#fff}main .magenta ::selection{background-color:oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h)}main .cyan{background-color:oklch(.6437 .1019 187.38);color:#fff}main .cyan ::selection{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h)}main #examples{padding:2rem 0}main #examples h2{margin-top:0}main #examples #examples-grid{display:grid;grid-template-columns:repeat(5, 1fr);gap:1rem}@media(width <= 992px){main #examples #examples-grid{display:flex;flex-direction:column}}main #examples #examples-grid img{width:100%;aspect-ratio:1.33}main #examples #examples-grid figure{display:flex;flex-flow:column;margin:0}main #examples #examples-grid figcaption{background-color:oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);text-align:center;padding:.5rem}main #examples #examples-grid figcaption::selection,main #examples #examples-grid figcaption ::selection{background-color:oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.2) c h)}main #qa{padding:2rem 0}main #qa ::selection{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h)}main #qa h2{margin-top:0}main #qa details{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);cursor:pointer;margin-bottom:1rem}main #qa details summary{padding:1rem}main #qa details ::selection{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h)}main #qa details[open] summary{padding:0 0 1rem 0}main #qa details[open]{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);padding:1rem}main #qa details[open]::selection,main #qa details[open] ::selection{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.3) c h)}main #qa details[open] a,main #qa details[open] a:visited,main #qa details[open] a:hover,main #qa details[open] a:active{color:#fff}footer{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);color:#fff;padding:1rem;text-align:center}footer p{margin:0}footer ::selection{background-color:oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h)}/*# sourceMappingURL=index.css.map */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: local("JetBrains Mono"), url("/static/fonts/JetBrainsMono.woff2") format("woff2"), url("/static/fonts/JetBrainsMono.ttf") format("truetype");
+}
+/* latin */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: local("JetBrains Mono Italic"), url("/static/fonts/JetBrainsMono-Italic.woff2") format("woff2"), url("/static/fonts/JetBrainsMono-Italic.ttf") format("truetype");
+}
+body {
+  font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: oklch(97.35% 0.0261 90.1deg);
+  margin: 0;
+}
+body ::selection {
+  background-color: oklch(93.06% 0.026 92.4deg);
+}
+
+.container {
+  width: 95%;
+  margin: 0 auto;
+}
+@media (min-width: 576px) {
+  .container {
+    width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+  }
+}
+@media (min-width: 1400px) {
+  .container {
+    width: 1320px;
+  }
+}
+
+header {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  height: 80vh;
+  margin-right: 3rem;
+  grid-template-columns: 1.5fr 1fr;
+  margin-bottom: 2rem;
+}
+@media (width <= 992px) {
+  header {
+    display: flex;
+    flex-direction: column;
+    margin-right: 0;
+  }
+  header .background-image {
+    width: 100%;
+    aspect-ratio: 1.33;
+    margin-right: 0 !important;
+    border-bottom-right-radius: 1em !important;
+    border-bottom-left-radius: 1em;
+  }
+  header .headline {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+header h1 {
+  font-weight: 900;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 3rem;
+}
+header h1 + p {
+  margin-top: 0.25em;
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+header h1 + p + p {
+  margin-top: 0.5em;
+  font-style: italic;
+}
+header hr {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+header .background-image {
+  margin-right: 1rem;
+  background: radial-gradient(at 100% 86%, #9e968c, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 71%, #a39584, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 100%, #999791, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 57%, #a5927c, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 43%, #a28f75, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 29%, #9d8c70, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 14%, #978a6e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 100% 0, #95896d, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 0, #9d8556, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 14%, #9d8455, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 100%, #91856e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 86%, #928269, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 29%, #9b8154, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 71%, #947f61, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 43%, #987f56, rgba(0, 0, 0, 0) 50%), radial-gradient(at 86% 57%, #967e5a, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 43%, #9a7e45, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 0, #a38118, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 57%, #997c49, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 14%, #a17f13, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 29%, #957b41, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 0, #a17f00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 43%, #a17f00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 14%, #a17e00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 29%, #9e7f00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 43%, #8a7370, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 71%, #90764d, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 57%, #887371, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 29%, #9f7c00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 57%, #9e7c00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 14%, #8e773f, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 29%, #877170, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 14%, #9a7d00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 29%, #9c7a02, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 0, #987c00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 0, #8b753e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 43%, #9c7800, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 43%, #816d7e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 14%, #826e6f, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 71%, #806e72, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 29%, #7f6c7e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 57%, #7e6c7e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 0, #806d6f, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 71%, #967500, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 14%, #7c697e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 43%, #967400, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 0, #7b697e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 100%, #897130, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 57%, #977300, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 86%, #816c50, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 71%, #76687e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 86%, #896f25, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 57%, #906f00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 86%, #726773, rgba(0, 0, 0, 0) 50%), radial-gradient(at 71% 71%, #8b6d12, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 71%, #906d00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 86%, #896c00, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 86%, #6a637e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 86%, #896900, rgba(0, 0, 0, 0) 50%), radial-gradient(at 29% 100%, #716252, rgba(0, 0, 0, 0) 50%), radial-gradient(at 14% 100%, #645f73, rgba(0, 0, 0, 0) 50%), radial-gradient(at 57% 100%, #836500, rgba(0, 0, 0, 0) 50%), radial-gradient(at 0 100%, #5e5e7e, rgba(0, 0, 0, 0) 50%), radial-gradient(at 43% 100%, #7c6300, rgba(0, 0, 0, 0) 50%);
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-bottom-right-radius: 2em;
+  overflow: hidden;
+}
+header .background-image > div {
+  height: 100%;
+  width: 100%;
+  background-image: url("https://kakigoori.dev/5e858871-ede8-4f05-972c-abcfd10fcb64/auto");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+main .description {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+@media (width <= 992px) {
+  main .description {
+    display: flex;
+    flex-direction: column;
+  }
+}
+main .description mark {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  margin: 0 0 0.25em;
+  color: white;
+  background-color: oklch(59.24% 0.2025 355.89deg);
+}
+main .description mark::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
+}
+main .description mark.green {
+  background-color: oklch(64.44% 0.1508 118.6deg);
+}
+main .description mark.green::selection {
+  background-color: oklch(54.44% 0.1508 118.6deg);
+}
+main .description pre {
+  background-color: oklch(26.73% 0.0486 219.82deg);
+  color: white;
+  padding: 1rem;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  overflow-y: scroll;
+}
+main .description pre ::selection {
+  background-color: oklch(30.92% 0.0518 219.65deg);
+}
+main .magenta {
+  background-color: oklch(59.24% 0.2025 355.89deg);
+  color: white;
+}
+main .magenta ::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
+}
+main .cyan {
+  background-color: oklch(64.37% 0.1019 187.38deg);
+  color: white;
+}
+main .cyan ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+}
+main #examples {
+  padding: 2rem 0;
+}
+main #examples h2 {
+  margin-top: 0;
+}
+main #examples #examples-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+@media (width <= 992px) {
+  main #examples #examples-grid {
+    display: flex;
+    flex-direction: column;
+  }
+}
+main #examples #examples-grid img {
+  width: 100%;
+  aspect-ratio: 1.33;
+}
+main #examples #examples-grid figure {
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+}
+main #examples #examples-grid figcaption {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.1) c h);
+  text-align: center;
+  padding: 0.5rem;
+}
+main #examples #examples-grid figcaption::selection,
+main #examples #examples-grid figcaption ::selection {
+  background-color: oklch(from oklch(59.24% 0.2025 355.89deg) calc(l - 0.2) c h);
+}
+main #qa {
+  padding: 2rem 0;
+}
+main #qa ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+}
+main #qa h2 {
+  margin-top: 0;
+}
+main #qa details {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+main #qa details summary {
+  padding: 1rem;
+}
+main #qa details ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+}
+main #qa details[open] summary {
+  padding: 0 0 1rem 0;
+}
+main #qa details[open] {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+  padding: 1rem;
+}
+main #qa details[open]::selection,
+main #qa details[open] ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.3) c h);
+}
+main #qa details[open] a,
+main #qa details[open] a:visited,
+main #qa details[open] a:hover,
+main #qa details[open] a:active {
+  color: white;
+}
+
+footer {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.1) c h);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+footer p {
+  margin: 0;
+}
+footer ::selection {
+  background-color: oklch(from oklch(64.37% 0.1019 187.38deg) calc(l - 0.2) c h);
+}
+
+/*# sourceMappingURL=index.css.map */
