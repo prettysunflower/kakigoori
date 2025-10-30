@@ -175,6 +175,10 @@ DATABASES = {
         "PASSWORD": POSTGRES_PASSWORD,
         "HOST": POSTGRES_HOST,
         "PORT": POSTGRES_PORT,
+        "CONN_MAX_AGE": 0,
+        "OPTIONS": {
+            "pool": True,
+        },
     }
 }
 
