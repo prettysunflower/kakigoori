@@ -11,7 +11,7 @@ dependencies = [
     "certifi==2025.10.5",
     "charset-normalizer==3.4.4",
     "click==8.3.0",
-    "django==5.2.7",
+    "django==5.2.8",
     "gunicorn==23.0.0",
     "idna==3.11",
     "jmespath==1.0.1",
