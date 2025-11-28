@@ -7,15 +7,17 @@ use lapin::message::Delivery;
 use lapin::options::{
     BasicAckOptions, BasicConsumeOptions, BasicPublishOptions, QueueDeclareOptions,
 };
+use lapin::protocol::constants::REPLY_SUCCESS;
+use lapin::types::ShortString;
 use lapin::{
-    BasicProperties, Channel, Connection, ConnectionProperties, Consumer, types::FieldTable,
+    types::FieldTable, BasicProperties, Channel, Connection, ConnectionProperties, Consumer,
 };
 use std::fs::File;
 use std::io::{Read, Write};
 use std::{fs, io};
 
 fn generate_consumer_tag(channel: &Channel) -> String {
-    format!("ctag{}.{}", channel.id(), uuid::Uuid::new_v4().to_string())
+    format!("ctag{}.{}", channel.id(), uuid::Uuid::new_v4())
 }
 
 async fn handle_task(
@@ -36,8 +38,7 @@ async fn handle_task(
     let output = task_function.process(&input_file_path, &output_file_path)?;
 
     if !output.status.success() {
-        return Err(io::Error::new(
-            io::ErrorKind::Other,
+        return Err(io::Error::other(
             format!("process returned error, status {:?}", output.status.code()),
         ));
     }
@@ -99,8 +100,10 @@ async fn handle_file_type(
     queue: &str,
     task_function: impl file_processors::FileProcessor,
 ) -> Result<Result<(), lapin::Error>, lapin::Error> {
-    let mut queue_declare_options = QueueDeclareOptions::default();
-    queue_declare_options.durable = true;
+    let queue_declare_options = QueueDeclareOptions {
+        durable: true,
+        ..Default::default()
+    };
 
     channel
         .queue_declare(queue.into(), queue_declare_options, FieldTable::default())
@@ -126,7 +129,7 @@ async fn handle_file_type(
     Ok(handle_queue(&mut consumer, channel_process_variant, &task_function).await)
 }
 
-async fn connect_rabbit_mq() -> lapin::Result<Connection> {
+async fn connect_rabbit_mq() -> lapin::Result<(Connection, Vec<tokio::task::JoinHandle<Result<Result<(), lapin::Error>, lapin::Error>>>)> {
     let addr =
         std::env::var("RABBITMQ_ADDRESS").unwrap_or_else(|_| "amqp://127.0.0.1:5672/%2f".into());
 
@@ -163,16 +166,34 @@ async fn connect_rabbit_mq() -> lapin::Result<Connection> {
         }
     }
 
-    for task in tasks {
-        task.await.map_err(std::io::Error::from)???;
-    }
-
-    Ok(conn)
+    Ok((conn, tasks))
 }
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
-    connect_rabbit_mq().await.expect("TODO: panic message");
+
+    let a = connect_rabbit_mq().await;
+
+    match a {
+        Ok((conn, tasks)) => {
+            for task in tasks {
+                let task_result = task.await?;
+                if let Err(e) = task_result {
+                    eprintln!("Error handling task: {}", e);
+                }
+            }
+
+            let conn_close_result = conn.close(REPLY_SUCCESS, ShortString::from("Normal shutdown")).await;
+            if let Err(e) = conn_close_result {
+                eprintln!("Warning, error closing connection: {}", e);
+            }
+        }
+        Err(error) => {
+            eprintln!("Failed to initialize the worker");
+            eprintln!("{}", error);
+            std::process::exit(1);
+        }
+    }
 
     Ok(())
 }
