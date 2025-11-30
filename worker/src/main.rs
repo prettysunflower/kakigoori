@@ -1,7 +1,7 @@
 mod file_processors;
 mod json_messages;
 
-use crate::json_messages::json_messages::{TaskRequest, TaskResponse};
+use crate::json_messages::{TaskRequest, TaskResponse};
 use futures_lite::stream::StreamExt;
 use lapin::message::Delivery;
 use lapin::options::{
@@ -151,7 +151,7 @@ async fn connect_rabbit_mq() -> lapin::Result<(Connection, Vec<tokio::task::Join
                     conn.create_channel().await?,
                     conn.create_channel().await?,
                     "kakigoori_avif",
-                    file_processors::AVIF {},
+                    file_processors::Avif {},
                 )));
             }
             "webp" => {

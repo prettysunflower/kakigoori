@@ -2,12 +2,12 @@ use std::io;
 use std::process::{Command, Output};
 
 pub trait FileProcessor {
-    fn process(&self, input_file: &String, output_file: &String) -> io::Result<Output>;
+    fn process(&self, input_file: &str, output_file: &str) -> io::Result<Output>;
 }
 
-pub struct AVIF {}
-impl FileProcessor for AVIF {
-    fn process(&self, input_file: &String, output_file: &String) -> io::Result<Output> {
+pub struct Avif {}
+impl FileProcessor for Avif {
+    fn process(&self, input_file: &str, output_file: &str) -> io::Result<Output> {
         Command::new("/usr/bin/avifenc")
             .args([
                 "-c",
@@ -28,8 +28,8 @@ impl FileProcessor for AVIF {
                 "cq-level=35",
                 "-a",
                 "tune=iq",
-                input_file.as_str(),
-                output_file.as_str(),
+                input_file,
+                output_file,
             ])
             .output()
     }
@@ -37,17 +37,17 @@ impl FileProcessor for AVIF {
 
 pub struct WebP {}
 impl FileProcessor for WebP {
-    fn process(&self, input_file: &String, output_file: &String) -> io::Result<Output> {
+    fn process(&self, input_file: &str, output_file: &str) -> io::Result<Output> {
         Command::new("/usr/bin/cwebp")
             .args([
                 "/usr/bin/webp",
                 "-q",
                 "75",
-                input_file.as_str(),
+                input_file,
                 "-metadata",
                 "icc",
                 "-o",
-                output_file.as_str(),
+                output_file,
             ])
             .output()
     }

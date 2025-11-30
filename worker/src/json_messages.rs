@@ -1,4 +1,3 @@
-pub mod json_messages {
     use serde::{Deserialize, Serialize};
 
     mod base64 {
@@ -15,7 +14,7 @@ pub mod json_messages {
             let base64 = String::deserialize(d)?;
             STANDARD
                 .decode(base64.as_bytes())
-                .map_err(|e| serde::de::Error::custom(e))
+                .map_err(serde::de::Error::custom)
         }
     }
 
@@ -32,4 +31,3 @@ pub mod json_messages {
         pub variant_file: Vec<u8>,
         pub variant_id: String,
     }
-}
