@@ -1,0 +1,68 @@
+services:
+  kakigoori:
+    build:
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+  rabbitmq:
+    image: "rabbitmq:4.2.1"
+    ports:
+      - "5672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+  valkey:
+    image: "valkey/valkey:alpine"
+    ports:
+      - "6379:6379"
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1"
+    volumes:
+      - "~/docker_data/kakigoori/valkey:/data"
+  worker-results-processing:
+    build:
+      dockerfile: Dockerfile
+      target: dev
+    command:
+      - "worker_results_processing"
+    env_file:
+      - .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+  avif-image-worker:
+    build: worker
+    env_file:
+      - .env
+    environment:
+      WORKER_FILE_TYPES: avif
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+  webp-image-worker:
+    build: worker
+    env_file:
+      - .env
+    environment:
+      WORKER_FILE_TYPES: webp
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+  postgres:
+    image: postgres:18
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - "~/docker_data/kakigoori/postgres:/var/lib/postgresql"
