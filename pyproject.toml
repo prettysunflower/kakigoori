@@ -1,6 +1,6 @@
 [project]
 name = "kakigoori"
-version = "2.0.0"
+version = "2.0.1"
 description = "Image distribution for the web, simplified"
 readme = "README.md"
 requires-python = ">=3.11"
