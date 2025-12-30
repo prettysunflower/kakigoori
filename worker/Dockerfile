@@ -1,4 +1,4 @@
-FROM rust:1.91.1-alpine3.22 AS builder
+FROM rust:1.92-alpine3.23 AS builder
 
 RUN apk add musl-dev
 
