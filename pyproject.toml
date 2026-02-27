@@ -22,7 +22,7 @@ dev = [
     {include-group = "test"},
 ]
 stubs = [
-    "boto3-stubs[boto3]==1.42.54",
+    "boto3-stubs[boto3]==1.42.59",
     "django-stubs==5.2.9",
     "pika-stubs==0.1.3",
 ]
