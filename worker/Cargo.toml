@@ -4,10 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-lapin = "4.0.0-rc.1"
+lapin = "4.4.0"
 futures-lite = "2.6.1"
-tokio = { version = "1.49.0", features = ["rt", "macros"] }
-uuid = {version = "1.21.0", features = ["v4"]}
+tokio = { version = "1.51.1", features = ["rt", "macros"] }
+uuid = {version = "1.23.0", features = ["v4"]}
 serde_json = "1.0.149"
 serde = { version = "1.0.228", features = ["derive"] }
 base64 = "0.22.1"
