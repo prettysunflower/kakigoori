@@ -105,7 +105,7 @@ jobs:
         with:
           context: .
           push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
 
@@ -197,7 +197,7 @@ jobs:
         with:
           context: "{{defaultContext}}:static"
           push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
 
@@ -287,6 +287,6 @@ jobs:
         with:
           context: "{{defaultContext}}:worker"
           push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
