@@ -20,6 +20,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
+          flavor: |
+            latest=auto
+            prefix=
+            suffix=-amd64
           images: |
             git.prettysunflower.moe/prettysunflower/kakigoori
             ghcr.io/prettysunflower/kakigoori
@@ -71,6 +75,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
+          flavor: |
+            latest=true
+            prefix=
+            suffix=-arm64,onlatest=true
           images: |
             git.prettysunflower.moe/prettysunflower/kakigoori
             ghcr.io/prettysunflower/kakigoori
@@ -105,7 +113,7 @@ jobs:
         with:
           context: .
           push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-arm64
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
 
@@ -117,6 +125,60 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
+          images: |
+            git.prettysunflower.moe/prettysunflower/kakigoori-static
+            ghcr.io/prettysunflower/kakigoori-static
+            docker.io/prettysunflower/kakigoori-static
+
+      - name: Login to Gitea Container Hub
+        uses: docker/login-action@v4
+        with:
+          registry: git.prettysunflower.moe
+          username: ${{ vars.HUB_USERNAME }}
+          password: ${{ secrets.HUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          flavor: |
+            latest=true
+            prefix=
+            suffix=-amd64
+          registry: ghcr.io
+          username: ${{ vars.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          registry: docker.io
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: "{{defaultContext}}:static"
+          push: ${{ gitea.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64
+
+  static-arm64:
+    runs-on: ubuntu-latest-arm
+
+    steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          flavor: |
+            latest=true
+            prefix=
+            suffix=-arm64,onlatest=true
           images: |
             git.prettysunflower.moe/prettysunflower/kakigoori-static
             ghcr.io/prettysunflower/kakigoori-static
@@ -153,52 +215,6 @@ jobs:
           push: ${{ gitea.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64
-
-  static-arm64:
-    runs-on: ubuntu-latest-arm
-
-    steps:
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: |
-            git.prettysunflower.moe/prettysunflower/kakigoori-static
-            ghcr.io/prettysunflower/kakigoori-static
-            docker.io/prettysunflower/kakigoori-static
-
-      - name: Login to Gitea Container Hub
-        uses: docker/login-action@v4
-        with:
-          registry: git.prettysunflower.moe
-          username: ${{ vars.HUB_USERNAME }}
-          password: ${{ secrets.HUB_TOKEN }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ vars.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_TOKEN }}
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          registry: docker.io
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Build and push
-        uses: docker/build-push-action@v7
-        with:
-          context: "{{defaultContext}}:static"
-          push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-arm64
-          labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
 
 
@@ -210,6 +226,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
+          flavor: |
+            latest=true
+            prefix=
+            suffix=-amd64
           images: |
             git.prettysunflower.moe/prettysunflower/kakigoori-worker
             ghcr.io/prettysunflower/kakigoori-worker
@@ -253,6 +273,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
+          flavor: |
+            latest=true
+            prefix=
+            suffix=-arm64,onlatest=true
           images: |
             git.prettysunflower.moe/prettysunflower/kakigoori-worker
             ghcr.io/prettysunflower/kakigoori-worker
@@ -287,6 +311,6 @@ jobs:
         with:
           context: "{{defaultContext}}:worker"
           push: ${{ gitea.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-arm64
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
