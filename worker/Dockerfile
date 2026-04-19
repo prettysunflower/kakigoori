@@ -12,6 +12,6 @@ WORKDIR /kakigoori
 
 COPY --from=builder /kakigooriworker/target/release/kakigoori-worker .
 COPY --from=git.prettysunflower.moe/prettysunflower/webp:libwebp-1.6.0-2 /usr/bin/cwebp /usr/bin/
-COPY --from=git.prettysunflower.moe/prettysunflower/avif:libavif-1.3.0-libaom-3.13.1-svtav1psyex-3.0.2b-2 /usr/bin/avifenc /usr/bin/
+COPY --from=git.prettysunflower.moe/prettysunflower/avif:libavif-1.4.1-libaom-3.13.3-svta1psyex-3.0.2B /usr/bin/avifenc /usr/bin/
 
 CMD ["/kakigoori/kakigoori-worker"]
